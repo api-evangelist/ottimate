@@ -176,50 +176,6 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-oauth-api
-  name: PlateIQ oauth API
-  description: The oauth API from PlateIQ — 1 operation(s) for oauth.
-  humanURL: https://docs.ottimate.com/welcome
-  baseURL: https://api.ottimate.com/v1
-  tags:
-  - Authentication
-  tags_raw:
-  - oauth
-  properties:
-  - type: OpenAPI
-    url: openapi/plateiq-oauth-api-openapi.yml
-  - type: Documentation
-    url: https://docs.ottimate.com/welcome
-  - type: APIReference
-    url: https://docs.ottimate.com/api-reference
-  - type: GettingStarted
-    url: https://docs.ottimate.com/integration-journey
-  - type: Authentication
-    url: authentication/plateiq-authentication.yml
-  - type: Sandbox
-    url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-purchaseorders-api
-  name: PlateIQ purchaseOrders API
-  description: The purchaseOrders API from PlateIQ — 3 operation(s) for purchaseorders.
-  humanURL: https://docs.ottimate.com/welcome
-  baseURL: https://api.ottimate.com/v1
-  tags:
-  - Purchase Orders
-  tags_raw:
-  - purchaseOrders
-  properties:
-  - type: OpenAPI
-    url: openapi/plateiq-purchaseorders-api-openapi.yml
-  - type: Documentation
-    url: https://docs.ottimate.com/welcome
-  - type: APIReference
-    url: https://docs.ottimate.com/api-reference
-  - type: GettingStarted
-    url: https://docs.ottimate.com/integration-journey
-  - type: Authentication
-    url: authentication/plateiq-authentication.yml
-  - type: Sandbox
-    url: sandbox/plateiq-sandbox.yml
 - aid: plateiq:plateiq-receipts-api
   name: PlateIQ receipts API
   description: The receipts API from PlateIQ — 3 operation(s) for receipts.
@@ -254,6 +210,46 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/plateiq-vendors-api-openapi.yml
+  - type: Documentation
+    url: https://docs.ottimate.com/welcome
+  - type: APIReference
+    url: https://docs.ottimate.com/api-reference
+  - type: GettingStarted
+    url: https://docs.ottimate.com/integration-journey
+  - type: Authentication
+    url: authentication/plateiq-authentication.yml
+  - type: Sandbox
+    url: sandbox/plateiq-sandbox.yml
+- aid: plateiq:plateiq-oauth-api
+  name: PlateIQ OAUTH API
+  description: The oauth API from PlateIQ — 1 operation(s) for oauth.
+  humanURL: https://docs.ottimate.com/welcome
+  baseURL: https://api.ottimate.com/v1
+  tags:
+  - oauth
+  properties:
+  - type: OpenAPI
+    url: openapi/plateiq-oauth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.ottimate.com/welcome
+  - type: APIReference
+    url: https://docs.ottimate.com/api-reference
+  - type: GettingStarted
+    url: https://docs.ottimate.com/integration-journey
+  - type: Authentication
+    url: authentication/plateiq-authentication.yml
+  - type: Sandbox
+    url: sandbox/plateiq-sandbox.yml
+- aid: plateiq:plateiq-purchase-orders-api
+  name: PlateIQ Purchase Orders API
+  description: The Purchase Orders API from PlateIQ — 3 operation(s) for purchase orders.
+  humanURL: https://docs.ottimate.com/welcome
+  baseURL: https://api.ottimate.com/v1
+  tags:
+  - Purchase Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/plateiq-purchase-orders-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
