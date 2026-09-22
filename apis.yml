@@ -1,5 +1,5 @@
-aid: plateiq
-name: PlateIQ
+aid: ottimate
+name: Ottimate
 description: >-
   Ottimate (formerly Plate IQ) is an AI-powered accounts payable automation platform for
   restaurants, hospitality, and multi-location businesses. It captures and GL-codes invoices
@@ -8,7 +8,7 @@ description: >-
   Ottimate exposes a partner-provisioned REST API (OpenAPI 3.1) over JSON with OAuth2
   client-credentials plus API-key auth, idempotent writes, bulk and asynchronous operations, and
   ERP integrations for QuickBooks, NetSuite, Sage Intacct, Acumatica, and Microsoft Dynamics.
-url: https://raw.githubusercontent.com/api-evangelist/plateiq/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/ottimate/refs/heads/main/apis.yml
 deliveryModel:
   model: saas
   open_source: false
@@ -66,7 +66,7 @@ tags_raw:
 - Spend Management
 - ERP Integration
 apis:
-- aid: plateiq:plateiq-accounts-api
+- aid: ottimate:plateiq-accounts-api
   name: PlateIQ accounts API
   description: The accounts API from PlateIQ — 3 operation(s) for accounts.
   humanURL: https://docs.ottimate.com/welcome
@@ -88,7 +88,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-batch-api
+- aid: ottimate:plateiq-batch-api
   name: PlateIQ batch API
   description: The batch API from PlateIQ — 3 operation(s) for batch.
   humanURL: https://docs.ottimate.com/welcome
@@ -110,7 +110,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-catalog-api
+- aid: ottimate:plateiq-catalog-api
   name: PlateIQ catalog API
   description: The catalog API from PlateIQ — 12 operation(s) for catalog.
   humanURL: https://docs.ottimate.com/welcome
@@ -132,7 +132,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-dimensions-api
+- aid: ottimate:plateiq-dimensions-api
   name: PlateIQ dimensions API
   description: The dimensions API from PlateIQ — 3 operation(s) for dimensions.
   humanURL: https://docs.ottimate.com/welcome
@@ -154,7 +154,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-invoices-api
+- aid: ottimate:plateiq-invoices-api
   name: PlateIQ invoices API
   description: The invoices API from PlateIQ — 11 operation(s) for invoices.
   humanURL: https://docs.ottimate.com/welcome
@@ -176,7 +176,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-receipts-api
+- aid: ottimate:plateiq-receipts-api
   name: PlateIQ receipts API
   description: The receipts API from PlateIQ — 3 operation(s) for receipts.
   humanURL: https://docs.ottimate.com/welcome
@@ -198,7 +198,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-vendors-api
+- aid: ottimate:plateiq-vendors-api
   name: PlateIQ vendors API
   description: The vendors API from PlateIQ — 3 operation(s) for vendors.
   humanURL: https://docs.ottimate.com/welcome
@@ -220,7 +220,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-oauth-api
+- aid: ottimate:plateiq-oauth-api
   name: PlateIQ OAUTH API
   description: The oauth API from PlateIQ — 1 operation(s) for oauth.
   humanURL: https://docs.ottimate.com/welcome
@@ -242,7 +242,7 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: plateiq:plateiq-purchase-orders-api
+- aid: ottimate:plateiq-purchase-orders-api
   name: PlateIQ Purchase Orders API
   description: The Purchase Orders API from PlateIQ — 3 operation(s) for purchase orders.
   humanURL: https://docs.ottimate.com/welcome
@@ -333,3 +333,5 @@ common:
   url: security/plateiq-trust-center.yml
 - type: DomainSecurity
   url: security/plateiq-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/PlateIQ
