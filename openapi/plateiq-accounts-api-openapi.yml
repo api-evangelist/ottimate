@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: API Reference accounts API
+  title: Reference Accounts API
   version: 1.0.0
 servers:
 - url: https://api.ottimate.com/v1
@@ -8,7 +8,7 @@ servers:
 - url: https://sandbox-api.ottimate.com/v1
   description: Sandbox
 tags:
-- name: accounts
+- name: Accounts
 paths:
   /accounts/{id}/companies:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Retrieve companies for an account
       description: Returns a paginated list of companies associated with the specified account.
       tags:
-      - accounts
+      - Accounts
       parameters:
       - name: id
         in: path
@@ -73,7 +73,7 @@ paths:
       summary: Retrieve locations for an account
       description: Returns a paginated list of locations associated with the specified account.
       tags:
-      - accounts
+      - Accounts
       parameters:
       - name: id
         in: path
@@ -130,7 +130,7 @@ paths:
       summary: Retrieve accounts for the authenticated user
       description: Returns a paginated list of Ottimate accounts that the authenticated user has access to, based on partner associations linked to the OAuth client credentials.
       tags:
-      - accounts
+      - Accounts
       parameters:
       - name: search
         in: query
@@ -177,25 +177,6 @@ paths:
                 $ref: '#/components/schemas/Accounts_get_accounts_root_Response_200'
 components:
   schemas:
-    LocationObject:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        company:
-          type: string
-        location_group:
-          type: string
-          description: 'The group this location belongs to. Returned when X-API-Version: 1.1.0 or later.'
-        group:
-          type: string
-          description: 'Deprecated. Use location_group (requires X-API-Version: 1.1.0). Returned for X-API-Version: 1.0.0 and unversioned requests.'
-      required:
-      - id
-      - name
-      title: LocationObject
     CompanyObject:
       type: object
       properties:
@@ -225,7 +206,7 @@ components:
           items:
             $ref: '#/components/schemas/AccountObject'
       title: Accounts_get_accounts_root_Response_200
-    Accounts_get_accounts_id_locations_Response_200:
+    Accounts_get_accounts_id_companies_Response_200:
       type: object
       properties:
         count:
@@ -237,8 +218,8 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/LocationObject'
-      title: Accounts_get_accounts_id_locations_Response_200
+            $ref: '#/components/schemas/CompanyObject'
+      title: Accounts_get_accounts_id_companies_Response_200
     AccountObject:
       type: object
       properties:
@@ -267,7 +248,7 @@ components:
       - id
       - name
       title: AccountObject
-    Accounts_get_accounts_id_companies_Response_200:
+    Accounts_get_accounts_id_locations_Response_200:
       type: object
       properties:
         count:
@@ -279,8 +260,27 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/CompanyObject'
-      title: Accounts_get_accounts_id_companies_Response_200
+            $ref: '#/components/schemas/LocationObject'
+      title: Accounts_get_accounts_id_locations_Response_200
+    LocationObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        company:
+          type: string
+        location_group:
+          type: string
+          description: 'The group this location belongs to. Returned when X-API-Version: 1.1.0 or later.'
+        group:
+          type: string
+          description: 'Deprecated. Use location_group (requires X-API-Version: 1.1.0). Returned for X-API-Version: 1.0.0 and unversioned requests.'
+      required:
+      - id
+      - name
+      title: LocationObject
   securitySchemes:
     OAuth2:
       type: http

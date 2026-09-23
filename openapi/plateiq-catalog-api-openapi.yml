@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: API Reference accounts catalog API
+  title: Reference Catalog API
   version: 1.0.0
 servers:
 - url: https://api.ottimate.com/v1
@@ -8,7 +8,7 @@ servers:
 - url: https://sandbox-api.ottimate.com/v1
   description: Sandbox
 tags:
-- name: catalog
+- name: Catalog
 paths:
   /catalog/entries:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: List catalog entries
       description: Returns a paginated list of catalog entries, filterable by company, vendor, and search term.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: ottimate_company_id
         in: query
@@ -140,7 +140,7 @@ paths:
       summary: Create a catalog entry
       description: Creates a new catalog entry or updates an existing one if catalog_unique_key matches.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -279,7 +279,7 @@ paths:
       summary: Retrieve a catalog entry
       description: Returns detailed information for a single catalog entry.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: id
         in: path
@@ -323,7 +323,7 @@ paths:
       summary: Update a catalog entry
       description: Updates an existing catalog entry by ID.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: id
         in: path
@@ -440,7 +440,7 @@ paths:
       summary: List catalog allowances
       description: Returns a paginated list of catalog allowances, filterable by company, catalog entry, location, and effective date.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: ottimate_company_id
         in: query
@@ -515,7 +515,7 @@ paths:
       summary: Create a catalog allowance
       description: Creates a new catalog allowance for a catalog entry.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -615,7 +615,7 @@ paths:
       summary: Update a catalog allowance
       description: Updates an existing catalog allowance by ID.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: id
         in: path
@@ -707,7 +707,7 @@ paths:
       summary: List catalog variances
       description: Returns catalog entries with price variance information from invoice items. By default, returns all items that had purchases in the specified period, including items with zero variance. Use variance_only=true to return only entries with non-zero variance. Use expand=invoice_items to include all invoice items inline (otherwise only the most recent invoice item is returned).
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: ottimate_company_id
         in: query
@@ -811,7 +811,7 @@ paths:
 
         **Deprecation notice:** The previous synchronous bulk API has been deprecated. This async endpoint is the recommended behavior going forward — it avoids timeouts on large batches and provides progress tracking via the batch polling API.'
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -865,7 +865,7 @@ paths:
 
         **Deprecation notice:** The previous synchronous bulk API has been deprecated. This async endpoint is the recommended behavior going forward — it avoids timeouts on large batches and provides progress tracking via the batch polling API.'
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -919,7 +919,7 @@ paths:
 
         **Deprecation notice:** The previous synchronous bulk API has been deprecated. This async endpoint is the recommended behavior going forward — it avoids timeouts on large batches and provides progress tracking via the batch polling API.'
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -970,7 +970,7 @@ paths:
       summary: Get invoice items for a catalog entry
       description: Returns paginated invoice items with price variances for a specific catalog entry. Use this endpoint when the expand=invoice_items response indicates has_more=true.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: id
         in: path
@@ -1027,7 +1027,7 @@ paths:
       summary: List exported catalog variance batches
       description: Returns exported Catalog Variance Manager batches for the given company. Only batches with export_status='exported' are ever returned — drafts and failed batches are excluded. The costbatch_payload in each result matches the Pyxis /costbatch format exactly.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: ottimate_company_id
         in: query
@@ -1124,7 +1124,7 @@ paths:
       summary: Export a catalog variance batch (local only)
       description: Marks the batch as exported without sending data to any external system. Sets exported_at to the current timestamp and api_status to success. Returns the exported batch with its costbatch_payload. Returns 400 if the batch is already exported.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: id
         in: path
@@ -1187,7 +1187,7 @@ paths:
       summary: List catalog prices
       description: Returns a paginated list of catalog prices, filterable by company, catalog entry, location, effective date, and price type.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: ottimate_company_id
         in: query
@@ -1268,7 +1268,7 @@ paths:
       summary: Create a catalog price
       description: Creates a new catalog price for a catalog entry.
       tags:
-      - catalog
+      - Catalog
       parameters:
       - name: Authorization
         in: header
@@ -1361,162 +1361,32 @@ paths:
               - start_date
 components:
   schemas:
-    CatalogEntryObjectPricesItemsPriceTypeDisplay:
+    CatalogEntriesIdPatchRequestBodyContentApplicationJsonSchema:
+      type: object
+      properties: {}
+      description: Additional properties
+      title: CatalogEntriesIdPatchRequestBodyContentApplicationJsonSchema
+    CatalogEntryObjectAllowancesItemsTargetType:
       type: string
       enum:
       - company
       - location_group
       - location
-      description: Human-readable price type
-      title: CatalogEntryObjectPricesItemsPriceTypeDisplay
-    CatalogPricesPostRequestBodyContentApplicationJsonSchemaPriceType:
+      description: Human-readable target type
+      title: CatalogEntryObjectAllowancesItemsTargetType
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData:
+      type: object
+      properties: {}
+      description: Additional custom properties for this allowance
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData
+    CatalogEntryObjectAllowancesItemsAllowanceType:
       type: string
       enum:
-      - company
-      - location_group
-      - location
-      description: 'Price type: company (default), location_group, or location'
-      title: CatalogPricesPostRequestBodyContentApplicationJsonSchemaPriceType
-    CatalogEntriesBulkAsyncResponse:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API version of this response
-        status:
-          type: string
-          description: Processing status
-        batch_id:
-          type: string
-          description: Unique identifier for this batch job. Use to poll for progress.
-        batch_url:
-          type: string
-          description: URL to poll for batch progress (GET)
-        results_url:
-          type: string
-          description: URL to retrieve batch results once completed (GET)
-        summary:
-          $ref: '#/components/schemas/CatalogEntriesBulkAsyncResponseSummary'
-          description: Summary of the submitted request
-      required:
-      - version
-      - status
-      - batch_id
-      - batch_url
-      - results_url
-      - summary
-      description: Response returned immediately when a bulk entries request is accepted for async processing.
-      title: CatalogEntriesBulkAsyncResponse
-    CatalogVarianceBatchObject:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique batch identifier (prefixed with ctb_)
-        ottimate_company_id:
-          type: integer
-          description: Company ID this batch belongs to
-        batch_number:
-          type: integer
-          description: Sequential batch number within the company
-        export_status:
-          $ref: '#/components/schemas/CatalogVarianceBatchObjectExportStatus'
-          description: Always 'exported' — non-exported batches are never returned by this API
-        exported_at:
-          type: string
-          format: date-time
-          description: Timestamp when the batch was exported
-        exported_at_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of exported_at. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        costbatch_payload:
-          $ref: '#/components/schemas/CostBatchPayload'
-      required:
-      - id
-      - ottimate_company_id
-      - batch_number
-      - export_status
-      - exported_at
-      - costbatch_payload
-      description: An exported Catalog Variance Manager batch.
-      title: CatalogVarianceBatchObject
-    CatalogEntryObjectPricesItems:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Price ID
-        price:
-          type: string
-          description: Price amount (decimal string)
-        unit_price:
-          type: string
-          description: Unit price (decimal string)
-        price_type:
-          type: integer
-          description: Price type
-        price_type_display:
-          $ref: '#/components/schemas/CatalogEntryObjectPricesItemsPriceTypeDisplay'
-          description: Human-readable price type
-        ottimate_location_id:
-          type: integer
-          description: Location ID
-        ottimate_group_id:
-          type: integer
-          description: Location group ID
-        start_date:
-          type: string
-          format: date-time
-          description: Price start date
-        start_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of start_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        end_date:
-          type: string
-          format: date-time
-          description: Price end date
-        end_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of end_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        reference_id:
-          type: string
-          description: Unique key
-        created_date:
-          type: string
-          format: date-time
-          description: Record creation date
-        created_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of created_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        last_modified_date:
-          type: string
-          format: date-time
-          description: Record last modified date
-        last_modified_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-      required:
-      - id
-      - price
-      - price_type
-      - start_date
-      description: Catalog price object
-      title: CatalogEntryObjectPricesItems
+      - allowance
+      - discount
+      - rebate
+      description: Type of allowance
+      title: CatalogEntryObjectAllowancesItemsAllowanceType
     CatalogAllowanceObject:
       type: object
       properties:
@@ -1600,57 +1470,144 @@ components:
       - start_date
       description: Catalog allowance object for standalone list endpoint
       title: CatalogAllowanceObject
-    CatalogAllowanceObjectAllowanceType:
+    CostBatchPayload:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Human-readable batch description, e.g. 'Catalog Batch 42'
+        zone:
+          type: string
+          description: Geographical zone for this batch
+        import_def_id:
+          type: integer
+          description: Pyxis import definition ID from the company token. Defaults to 0 if no Pyxis token is configured.
+        external_batch_number:
+          type: string
+          description: String representation of the batch number
+        start_datetime:
+          type: string
+          format: date-time
+          description: Start date for this batch's price updates
+        catalog_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogItemPayload'
+          description: List of catalog items with updated costs
+      description: Costbatch payload in the same shape as the Pyxis /costbatch endpoint.
+      title: CostBatchPayload
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType:
       type: string
       enum:
-      - allowance
-      - discount
-      - rebate
-      description: Type of allowance
-      title: CatalogAllowanceObjectAllowanceType
-    CatalogVariancesGetParametersExceptionType:
-      type: string
-      enum:
-      - underbilling
-      - overbilling
-      title: CatalogVariancesGetParametersExceptionType
-    CatalogEntryObjectAllowancesItemsAllowanceType:
-      type: string
-      enum:
-      - allowance
-      - discount
-      - rebate
-      description: Type of allowance
-      title: CatalogEntryObjectAllowancesItemsAllowanceType
-    CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaAllowanceType:
-      type: string
-      enum:
-      - allowance
-      - discount
-      - rebate
-      description: 'Type of allowance (default: ''allowance'')'
-      title: CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaAllowanceType
-    CatalogEntryObjectAllowancesItems:
+      - company
+      - location_group
+      - location
+      description: 'Price type: company (default), location_group, or location'
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItems:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+          description: Price amount (required)
+        unit_price:
+          type: number
+          format: double
+          description: Price per individual unit
+        price_type:
+          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType'
+          description: 'Price type: company (default), location_group, or location'
+        ottimate_location_id:
+          type: integer
+          description: Location ID (required when price_type is 'location')
+        ottimate_group_id:
+          type: integer
+          description: Location group ID (required when price_type is 'location_group')
+        start_date:
+          type: string
+          format: date-time
+          description: Price effective start date (ISO 8601)
+        end_date:
+          type: string
+          format: date-time
+          description: Price effective end date (ISO 8601)
+        reference_id:
+          type: string
+          description: Unique key for this price record
+        data:
+          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData'
+          description: Additional custom properties for this price
+      required:
+      - price
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItems
+    CatalogEntriesBulkAsyncResponseSummary:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Number of entries submitted for processing
+      description: Summary of the submitted request
+      title: CatalogEntriesBulkAsyncResponseSummary
+    VarianceListResponseResultsItems:
       type: object
       properties:
         id:
           type: string
-          description: Allowance ID
-        allowance_type:
-          $ref: '#/components/schemas/CatalogEntryObjectAllowancesItemsAllowanceType'
-          description: Type of allowance
-        amount:
+          description: Catalog entry ID
+        item_name:
           type: string
-          description: Allowance amount (decimal string)
-        unit_allowance:
+        sku:
           type: string
-          description: Unit allowance amount (decimal string)
-        target:
+        upc:
+          type: string
+        pack_size:
+          type: string
+        erp_vendor_id:
+          type: string
+          description: ERP Vendor id from ERP/accounting system
+        last_invoice_item:
+          $ref: '#/components/schemas/VarianceListResponseResultsItemsLastInvoiceItem'
+      required:
+      - id
+      - item_name
+      title: VarianceListResponseResultsItems
+    Catalog_get_catalog_prices_Response_200:
+      type: object
+      properties:
+        count:
           type: integer
-          description: Target code (10=company, 15=location_group, 20=location)
-        target_type:
-          $ref: '#/components/schemas/CatalogEntryObjectAllowancesItemsTargetType'
-          description: Human-readable target type
+        page:
+          type: integer
+        per_page:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogPriceItem'
+      required:
+      - count
+      - results
+      description: Paginated list of catalog prices
+      title: Catalog_get_catalog_prices_Response_200
+    CatalogEntryObjectPricesItems:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Price ID
+        price:
+          type: string
+          description: Price amount (decimal string)
+        unit_price:
+          type: string
+          description: Unit price (decimal string)
+        price_type:
+          type: integer
+          description: Price type
+        price_type_display:
+          $ref: '#/components/schemas/CatalogEntryObjectPricesItemsPriceTypeDisplay'
+          description: Human-readable price type
         ottimate_location_id:
           type: integer
           description: Location ID
@@ -1660,7 +1617,7 @@ components:
         start_date:
           type: string
           format: date-time
-          description: Allowance start date
+          description: Price start date
         start_date_utc:
           type:
           - string
@@ -1670,7 +1627,7 @@ components:
         end_date:
           type: string
           format: date-time
-          description: Allowance end date
+          description: Price end date
         end_date_utc:
           type:
           - string
@@ -1702,26 +1659,20 @@ components:
           description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
       required:
       - id
-      - allowance_type
-      - amount
-      - target
+      - price
+      - price_type
       - start_date
-      description: Catalog allowance object nested in catalog entry
-      title: CatalogEntryObjectAllowancesItems
-    CatalogPriceItemPriceTypeDisplay:
+      description: Catalog price object
+      title: CatalogEntryObjectPricesItems
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget:
       type: string
       enum:
       - company
       - location_group
       - location
-      description: Human-readable price type
-      title: CatalogPriceItemPriceTypeDisplay
-    CatalogEntryObjectDimensions:
-      type: object
-      properties: {}
-      description: Resolved dimensions keyed by uppercase dimension type (e.g. DEPARTMENT, SUB_DEPARTMENT, CATEGORY, SUBCATEGORY, PROJECT, CLASS). Each value is the dimension name (or code if name is unavailable).
-      title: CatalogEntryObjectDimensions
-    CatalogAllowancesBulkAsyncResponse:
+      description: 'Allowance target: company (default), location_group, or location'
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget
+    CatalogEntriesBulkAsyncResponse:
       type: object
       properties:
         version:
@@ -1740,7 +1691,7 @@ components:
           type: string
           description: URL to retrieve batch results once completed (GET)
         summary:
-          $ref: '#/components/schemas/CatalogAllowancesBulkAsyncResponseSummary'
+          $ref: '#/components/schemas/CatalogEntriesBulkAsyncResponseSummary'
           description: Summary of the submitted request
       required:
       - version
@@ -1749,35 +1700,255 @@ components:
       - batch_url
       - results_url
       - summary
-      description: Response returned immediately when a bulk allowances request is accepted for async processing.
-      title: CatalogAllowancesBulkAsyncResponse
-    VarianceListResponseResultsItemsLastInvoiceItem:
+      description: Response returned immediately when a bulk entries request is accepted for async processing.
+      title: CatalogEntriesBulkAsyncResponse
+    CatalogEntryObjectDimensions:
+      type: object
+      properties: {}
+      description: Resolved dimensions keyed by uppercase dimension type (e.g. DEPARTMENT, SUB_DEPARTMENT, CATEGORY, SUBCATEGORY, PROJECT, CLASS). Each value is the dimension name (or code if name is unavailable).
+      title: CatalogEntryObjectDimensions
+    CatalogVarianceBatchObject:
       type: object
       properties:
         id:
-          type: integer
-        price:
-          type: number
-          format: double
-        invoice_date:
           type: string
-          format: date
-        price_variance:
+          description: Unique batch identifier (prefixed with ctb_)
+        ottimate_company_id:
+          type: integer
+          description: Company ID this batch belongs to
+        batch_number:
+          type: integer
+          description: Sequential batch number within the company
+        export_status:
+          $ref: '#/components/schemas/CatalogVarianceBatchObjectExportStatus'
+          description: Always 'exported' — non-exported batches are never returned by this API
+        exported_at:
+          type: string
+          format: date-time
+          description: Timestamp when the batch was exported
+        exported_at_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of exported_at. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        costbatch_payload:
+          $ref: '#/components/schemas/CostBatchPayload'
+      required:
+      - id
+      - ottimate_company_id
+      - batch_number
+      - export_status
+      - exported_at
+      - costbatch_payload
+      description: An exported Catalog Variance Manager batch.
+      title: CatalogVarianceBatchObject
+    CatalogPricesPostRequestBodyContentApplicationJsonSchemaPriceType:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      description: 'Price type: company (default), location_group, or location'
+      title: CatalogPricesPostRequestBodyContentApplicationJsonSchemaPriceType
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItems:
+      type: object
+      properties:
+        allowance_type:
+          type: string
+          description: Type of allowance (e.g., 'allowance', 'rebate')
+        allowance:
           type: number
           format: double
-        effective_price:
+          description: Allowance amount (required)
+        unit_allowance:
           type: number
           format: double
+          description: Allowance per individual unit
+        target:
+          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget'
+          description: 'Allowance target: company (default), location_group, or location'
+        ottimate_location_id:
+          type: integer
+          description: Location ID (for location-level allowances)
+        ottimate_group_id:
+          type: integer
+          description: Location group ID (for location_group-level allowances)
+        start_date:
+          type: string
+          format: date-time
+          description: Allowance effective start date (ISO 8601, required)
+        end_date:
+          type: string
+          format: date-time
+          description: Allowance effective end date (ISO 8601)
+        reference_id:
+          type: string
+          description: Unique key for this allowance record
+        data:
+          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData'
+          description: Additional custom properties for this allowance
+      required:
+      - allowance
+      - start_date
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItems
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData:
+      type: object
+      properties: {}
+      description: Additional custom properties for this price
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData
+    CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaAllowanceType:
+      type: string
+      enum:
+      - allowance
+      - discount
+      - rebate
+      description: 'Type of allowance (default: ''allowance'')'
+      title: CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaAllowanceType
+    CatalogPriceItemPriceTypeDisplay:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      description: Human-readable price type
+      title: CatalogPriceItemPriceTypeDisplay
+    CatalogVarianceBatchListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of results
+        next:
+          type:
+          - string
+          - 'null'
+          description: URL to next page, or null
+        previous:
+          type:
+          - string
+          - 'null'
+          description: URL to previous page, or null
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogVarianceBatchObject'
+      description: Paginated list of exported catalog variance batches.
+      title: CatalogVarianceBatchListResponse
+    CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaTarget:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      description: 'Allowance target: company (default), location_group, or location'
+      title: CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaTarget
+    CatalogPriceItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Price ID
+        catalog_entry_id:
+          type: string
+          description: Catalog entry ID
+        ottimate_company_id:
+          type: integer
+          description: Company ID
+        price:
+          type: string
+          description: Price amount (decimal string)
+        unit_price:
+          type: string
+          description: Unit price (decimal string)
+        price_type:
+          type: integer
+          description: Price type
+        price_type_display:
+          $ref: '#/components/schemas/CatalogPriceItemPriceTypeDisplay'
+          description: Human-readable price type
+        ottimate_location_id:
+          type: integer
+          description: Location ID
+        ottimate_group_id:
+          type: integer
+          description: Location group ID
+        start_date:
+          type: string
+          format: date-time
+          description: Price start date
+        end_date:
+          type: string
+          format: date-time
+          description: Price end date
+        reference_id:
+          type: string
+          description: Unique key
+        created_date:
+          type: string
+          format: date-time
+          description: Record creation date
+        created_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of created_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        last_modified_date:
+          type: string
+          format: date-time
+          description: Record last modified date
+        last_modified_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
       required:
       - id
       - price
-      - invoice_date
-      title: VarianceListResponseResultsItemsLastInvoiceItem
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchema:
+      - price_type
+      - start_date
+      description: Catalog price object
+      title: CatalogPriceItem
+    CatalogPricesBulkAsyncResponse:
       type: object
-      properties: {}
-      description: Additional custom properties as key-value pairs
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchema
+      properties:
+        version:
+          type: string
+          description: API version of this response
+        status:
+          type: string
+          description: Processing status
+        batch_id:
+          type: string
+          description: Unique identifier for this batch job. Use to poll for progress.
+        batch_url:
+          type: string
+          description: URL to poll for batch progress (GET)
+        results_url:
+          type: string
+          description: URL to retrieve batch results once completed (GET)
+        summary:
+          $ref: '#/components/schemas/CatalogPricesBulkAsyncResponseSummary'
+          description: Summary of the submitted request
+      required:
+      - version
+      - status
+      - batch_id
+      - batch_url
+      - results_url
+      - summary
+      description: Response returned immediately when a bulk prices request is accepted for async processing.
+      title: CatalogPricesBulkAsyncResponse
+    CatalogAllowanceListResponseResultsItemsAllowanceType:
+      type: string
+      enum:
+      - allowance
+      - discount
+      - rebate
+      description: Type of allowance
+      title: CatalogAllowanceListResponseResultsItemsAllowanceType
     CatalogEntryObject:
       type: object
       properties:
@@ -1896,127 +2067,6 @@ components:
       - item_name
       description: Full catalog entry object returned for retrieve operations
       title: CatalogEntryObject
-    CatalogAllowanceListResponseResultsItemsAllowanceType:
-      type: string
-      enum:
-      - allowance
-      - discount
-      - rebate
-      description: Type of allowance
-      title: CatalogAllowanceListResponseResultsItemsAllowanceType
-    CatalogPricesBulkAsyncResponseSummary:
-      type: object
-      properties:
-        count:
-          type: integer
-          description: Number of prices submitted for processing
-      description: Summary of the submitted request
-      title: CatalogPricesBulkAsyncResponseSummary
-    CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaTarget:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      description: 'Allowance target: company, location_group, or location'
-      title: CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaTarget
-    CatalogEntryObjectAllowancesItemsTargetType:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      description: Human-readable target type
-      title: CatalogEntryObjectAllowancesItemsTargetType
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      description: 'Price type: company (default), location_group, or location'
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType
-    CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaTarget:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      description: 'Allowance target: company (default), location_group, or location'
-      title: CatalogAllowancesPostRequestBodyContentApplicationJsonSchemaTarget
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItems:
-      type: object
-      properties:
-        allowance_type:
-          type: string
-          description: Type of allowance (e.g., 'allowance', 'rebate')
-        allowance:
-          type: number
-          format: double
-          description: Allowance amount (required)
-        unit_allowance:
-          type: number
-          format: double
-          description: Allowance per individual unit
-        target:
-          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget'
-          description: 'Allowance target: company (default), location_group, or location'
-        ottimate_location_id:
-          type: integer
-          description: Location ID (for location-level allowances)
-        ottimate_group_id:
-          type: integer
-          description: Location group ID (for location_group-level allowances)
-        start_date:
-          type: string
-          format: date-time
-          description: Allowance effective start date (ISO 8601, required)
-        end_date:
-          type: string
-          format: date-time
-          description: Allowance effective end date (ISO 8601)
-        reference_id:
-          type: string
-          description: Unique key for this allowance record
-        data:
-          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData'
-          description: Additional custom properties for this allowance
-      required:
-      - allowance
-      - start_date
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItems
-    InvoiceItemVarianceListResponseResultsItems:
-      type: object
-      properties:
-        id:
-          type: integer
-        invoice_id:
-          type: integer
-        item_name:
-          type: string
-        price:
-          type: number
-          format: double
-        quantity:
-          type: number
-          format: double
-        invoice_date:
-          type: string
-          format: date
-        price_variance:
-          type: number
-          format: double
-        effective_price:
-          type: number
-          format: double
-      required:
-      - id
-      - invoice_id
-      - item_name
-      - price
-      - quantity
-      - invoice_date
-      title: InvoiceItemVarianceListResponseResultsItems
     CatalogAllowancesBulkAsyncResponseSummary:
       type: object
       properties:
@@ -2025,27 +2075,128 @@ components:
           description: Number of allowances submitted for processing
       description: Summary of the submitted request
       title: CatalogAllowancesBulkAsyncResponseSummary
-    CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaAllowanceType:
+    CatalogEntryObjectWarningsItems:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Warning message describing the missing field
+      title: CatalogEntryObjectWarningsItems
+    CatalogEntryObjectAllowancesItems:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Allowance ID
+        allowance_type:
+          $ref: '#/components/schemas/CatalogEntryObjectAllowancesItemsAllowanceType'
+          description: Type of allowance
+        amount:
+          type: string
+          description: Allowance amount (decimal string)
+        unit_allowance:
+          type: string
+          description: Unit allowance amount (decimal string)
+        target:
+          type: integer
+          description: Target code (10=company, 15=location_group, 20=location)
+        target_type:
+          $ref: '#/components/schemas/CatalogEntryObjectAllowancesItemsTargetType'
+          description: Human-readable target type
+        ottimate_location_id:
+          type: integer
+          description: Location ID
+        ottimate_group_id:
+          type: integer
+          description: Location group ID
+        start_date:
+          type: string
+          format: date-time
+          description: Allowance start date
+        start_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of start_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        end_date:
+          type: string
+          format: date-time
+          description: Allowance end date
+        end_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of end_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        reference_id:
+          type: string
+          description: Unique key
+        created_date:
+          type: string
+          format: date-time
+          description: Record creation date
+        created_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of created_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        last_modified_date:
+          type: string
+          format: date-time
+          description: Record last modified date
+        last_modified_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+      required:
+      - id
+      - allowance_type
+      - amount
+      - target
+      - start_date
+      description: Catalog allowance object nested in catalog entry
+      title: CatalogEntryObjectAllowancesItems
+    CatalogPricesBulkAsyncResponseSummary:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Number of prices submitted for processing
+      description: Summary of the submitted request
+      title: CatalogPricesBulkAsyncResponseSummary
+    CatalogAllowanceObjectAllowanceType:
       type: string
       enum:
       - allowance
       - discount
       - rebate
       description: Type of allowance
-      title: CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaAllowanceType
-    CatalogAllowanceObjectTargetType:
+      title: CatalogAllowanceObjectAllowanceType
+    CatalogEntryObjectPricesItemsPriceTypeDisplay:
       type: string
       enum:
       - company
       - location_group
       - location
-      description: Human-readable target type
-      title: CatalogAllowanceObjectTargetType
-    CatalogItemPayload:
+      description: Human-readable price type
+      title: CatalogEntryObjectPricesItemsPriceTypeDisplay
+    CatalogAllowanceListResponse:
       type: object
-      properties: {}
-      description: Additional metadata from the catalog entry
-      title: CatalogItemPayload
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogAllowanceListResponseResultsItems'
+      required:
+      - count
+      - results
+      title: CatalogAllowanceListResponse
     CatalogAllowanceListResponseResultsItems:
       type: object
       properties:
@@ -2127,151 +2278,30 @@ components:
       - start_date
       description: Catalog allowance object for standalone list endpoint
       title: CatalogAllowanceListResponseResultsItems
-    Catalog_get_catalog_prices_Response_200:
-      type: object
-      properties:
-        count:
-          type: integer
-        page:
-          type: integer
-        per_page:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogPriceItem'
-      required:
-      - count
-      - results
-      description: Paginated list of catalog prices
-      title: Catalog_get_catalog_prices_Response_200
-    VarianceListResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/VarianceListResponseResultsItems'
-      required:
-      - count
-      - results
-      title: VarianceListResponse
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItems:
-      type: object
-      properties:
-        price:
-          type: number
-          format: double
-          description: Price amount (required)
-        unit_price:
-          type: number
-          format: double
-          description: Price per individual unit
-        price_type:
-          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsPriceType'
-          description: 'Price type: company (default), location_group, or location'
-        ottimate_location_id:
-          type: integer
-          description: Location ID (required when price_type is 'location')
-        ottimate_group_id:
-          type: integer
-          description: Location group ID (required when price_type is 'location_group')
-        start_date:
-          type: string
-          format: date-time
-          description: Price effective start date (ISO 8601)
-        end_date:
-          type: string
-          format: date-time
-          description: Price effective end date (ISO 8601)
-        reference_id:
-          type: string
-          description: Unique key for this price record
-        data:
-          $ref: '#/components/schemas/CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData'
-          description: Additional custom properties for this price
-      required:
-      - price
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItems
-    CatalogPricesBulkAsyncResponse:
+    InvoiceItemVarianceListResponse:
       type: object
       properties:
         version:
           type: string
-          description: API version of this response
-        status:
-          type: string
-          description: Processing status
-        batch_id:
-          type: string
-          description: Unique identifier for this batch job. Use to poll for progress.
-        batch_url:
-          type: string
-          description: URL to poll for batch progress (GET)
-        results_url:
-          type: string
-          description: URL to retrieve batch results once completed (GET)
-        summary:
-          $ref: '#/components/schemas/CatalogPricesBulkAsyncResponseSummary'
-          description: Summary of the submitted request
-      required:
-      - version
-      - status
-      - batch_id
-      - batch_url
-      - results_url
-      - summary
-      description: Response returned immediately when a bulk prices request is accepted for async processing.
-      title: CatalogPricesBulkAsyncResponse
-    CatalogEntriesIdPatchRequestBodyContentApplicationJsonSchema:
-      type: object
-      properties: {}
-      description: Additional properties
-      title: CatalogEntriesIdPatchRequestBodyContentApplicationJsonSchema
-    CatalogAllowanceListResponseResultsItemsTargetType:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      description: Human-readable target type
-      title: CatalogAllowanceListResponseResultsItemsTargetType
-    CatalogEntryListResponse:
-      type: object
-      properties:
+          description: API version
         count:
           type: integer
-          description: Total number of results
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogEntryListResponseResultsItems'
-          description: List of catalog entries (uses CatalogEntryBasicObject by default, CatalogEntryObject when expand is used)
+          description: Total number of invoice items
         page:
           type: integer
           description: Current page number
-        per_page:
+        limit:
           type: integer
           description: Items per page
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemVarianceListResponseResultsItems'
       required:
       - count
       - results
-      title: CatalogEntryListResponse
-    CatalogPricesGetParametersPriceType:
-      type: string
-      enum:
-      - company
-      - location_group
-      - location
-      title: CatalogPricesGetParametersPriceType
-    CatalogVarianceBatchObjectExportStatus:
-      type: string
-      enum:
-      - exported
-      description: Always 'exported' — non-exported batches are never returned by this API
-      title: CatalogVarianceBatchObjectExportStatus
+      description: Paginated list of invoice items with variance information
+      title: InvoiceItemVarianceListResponse
     CatalogEntryListResponseResultsItems:
       type: object
       properties:
@@ -2367,11 +2397,71 @@ components:
       - item_name
       description: Basic catalog entry object returned for list operations
       title: CatalogEntryListResponseResultsItems
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData:
+    CatalogItemPayload:
       type: object
       properties: {}
-      description: Additional custom properties for this allowance
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsData
+      description: Additional metadata from the catalog entry
+      title: CatalogItemPayload
+    CatalogAllowanceObjectTargetType:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      description: Human-readable target type
+      title: CatalogAllowanceObjectTargetType
+    VarianceListResponseResultsItemsLastInvoiceItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        price:
+          type: number
+          format: double
+        invoice_date:
+          type: string
+          format: date
+        price_variance:
+          type: number
+          format: double
+        effective_price:
+          type: number
+          format: double
+      required:
+      - id
+      - price
+      - invoice_date
+      title: VarianceListResponseResultsItemsLastInvoiceItem
+    CatalogAllowancesBulkAsyncResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          description: API version of this response
+        status:
+          type: string
+          description: Processing status
+        batch_id:
+          type: string
+          description: Unique identifier for this batch job. Use to poll for progress.
+        batch_url:
+          type: string
+          description: URL to poll for batch progress (GET)
+        results_url:
+          type: string
+          description: URL to retrieve batch results once completed (GET)
+        summary:
+          $ref: '#/components/schemas/CatalogAllowancesBulkAsyncResponseSummary'
+          description: Summary of the submitted request
+      required:
+      - version
+      - status
+      - batch_id
+      - batch_url
+      - results_url
+      - summary
+      description: Response returned immediately when a bulk allowances request is accepted for async processing.
+      title: CatalogAllowancesBulkAsyncResponse
     ErrorResponse:
       type: object
       properties:
@@ -2390,210 +2480,120 @@ components:
       - code
       - message
       title: ErrorResponse
-    CatalogVarianceBatchListResponse:
+    CatalogVariancesGetParametersExceptionType:
+      type: string
+      enum:
+      - underbilling
+      - overbilling
+      title: CatalogVariancesGetParametersExceptionType
+    CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaAllowanceType:
+      type: string
+      enum:
+      - allowance
+      - discount
+      - rebate
+      description: Type of allowance
+      title: CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaAllowanceType
+    CatalogEntryListResponse:
       type: object
       properties:
         count:
           type: integer
           description: Total number of results
-        next:
-          type:
-          - string
-          - 'null'
-          description: URL to next page, or null
-        previous:
-          type:
-          - string
-          - 'null'
-          description: URL to previous page, or null
         results:
           type: array
           items:
-            $ref: '#/components/schemas/CatalogVarianceBatchObject'
-      description: Paginated list of exported catalog variance batches.
-      title: CatalogVarianceBatchListResponse
-    VarianceListResponseResultsItems:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Catalog entry ID
-        item_name:
-          type: string
-        sku:
-          type: string
-        upc:
-          type: string
-        pack_size:
-          type: string
-        erp_vendor_id:
-          type: string
-          description: ERP Vendor id from ERP/accounting system
-        last_invoice_item:
-          $ref: '#/components/schemas/VarianceListResponseResultsItemsLastInvoiceItem'
-      required:
-      - id
-      - item_name
-      title: VarianceListResponseResultsItems
-    CatalogAllowanceListResponse:
-      type: object
-      properties:
-        count:
+            $ref: '#/components/schemas/CatalogEntryListResponseResultsItems'
+          description: List of catalog entries (uses CatalogEntryBasicObject by default, CatalogEntryObject when expand is used)
+        page:
           type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogAllowanceListResponseResultsItems'
+          description: Current page number
+        per_page:
+          type: integer
+          description: Items per page
       required:
       - count
       - results
-      title: CatalogAllowanceListResponse
-    CostBatchPayload:
+      title: CatalogEntryListResponse
+    CatalogEntriesPostRequestBodyContentApplicationJsonSchema:
       type: object
-      properties:
-        description:
-          type: string
-          description: Human-readable batch description, e.g. 'Catalog Batch 42'
-        zone:
-          type: string
-          description: Geographical zone for this batch
-        import_def_id:
-          type: integer
-          description: Pyxis import definition ID from the company token. Defaults to 0 if no Pyxis token is configured.
-        external_batch_number:
-          type: string
-          description: String representation of the batch number
-        start_datetime:
-          type: string
-          format: date-time
-          description: Start date for this batch's price updates
-        catalog_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogItemPayload'
-          description: List of catalog items with updated costs
-      description: Costbatch payload in the same shape as the Pyxis /costbatch endpoint.
-      title: CostBatchPayload
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget:
+      properties: {}
+      description: Additional custom properties as key-value pairs
+      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchema
+    CatalogVarianceBatchObjectExportStatus:
+      type: string
+      enum:
+      - exported
+      description: Always 'exported' — non-exported batches are never returned by this API
+      title: CatalogVarianceBatchObjectExportStatus
+    CatalogAllowanceListResponseResultsItemsTargetType:
       type: string
       enum:
       - company
       - location_group
       - location
-      description: 'Allowance target: company (default), location_group, or location'
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaAllowancesItemsTarget
-    CatalogEntryObjectWarningsItems:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Warning message describing the missing field
-      title: CatalogEntryObjectWarningsItems
-    InvoiceItemVarianceListResponse:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API version
-        count:
-          type: integer
-          description: Total number of invoice items
-        page:
-          type: integer
-          description: Current page number
-        limit:
-          type: integer
-          description: Items per page
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceItemVarianceListResponseResultsItems'
-      required:
-      - count
-      - results
-      description: Paginated list of invoice items with variance information
-      title: InvoiceItemVarianceListResponse
-    CatalogEntriesBulkAsyncResponseSummary:
-      type: object
-      properties:
-        count:
-          type: integer
-          description: Number of entries submitted for processing
-      description: Summary of the submitted request
-      title: CatalogEntriesBulkAsyncResponseSummary
-    CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData:
-      type: object
-      properties: {}
-      description: Additional custom properties for this price
-      title: CatalogEntriesPostRequestBodyContentApplicationJsonSchemaPricesItemsData
-    CatalogPriceItem:
+      description: Human-readable target type
+      title: CatalogAllowanceListResponseResultsItemsTargetType
+    InvoiceItemVarianceListResponseResultsItems:
       type: object
       properties:
         id:
-          type: string
-          description: Price ID
-        catalog_entry_id:
-          type: string
-          description: Catalog entry ID
-        ottimate_company_id:
           type: integer
-          description: Company ID
+        invoice_id:
+          type: integer
+        item_name:
+          type: string
         price:
+          type: number
+          format: double
+        quantity:
+          type: number
+          format: double
+        invoice_date:
           type: string
-          description: Price amount (decimal string)
-        unit_price:
-          type: string
-          description: Unit price (decimal string)
-        price_type:
-          type: integer
-          description: Price type
-        price_type_display:
-          $ref: '#/components/schemas/CatalogPriceItemPriceTypeDisplay'
-          description: Human-readable price type
-        ottimate_location_id:
-          type: integer
-          description: Location ID
-        ottimate_group_id:
-          type: integer
-          description: Location group ID
-        start_date:
-          type: string
-          format: date-time
-          description: Price start date
-        end_date:
-          type: string
-          format: date-time
-          description: Price end date
-        reference_id:
-          type: string
-          description: Unique key
-        created_date:
-          type: string
-          format: date-time
-          description: Record creation date
-        created_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of created_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        last_modified_date:
-          type: string
-          format: date-time
-          description: Record last modified date
-        last_modified_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+          format: date
+        price_variance:
+          type: number
+          format: double
+        effective_price:
+          type: number
+          format: double
       required:
       - id
+      - invoice_id
+      - item_name
       - price
-      - price_type
-      - start_date
-      description: Catalog price object
-      title: CatalogPriceItem
+      - quantity
+      - invoice_date
+      title: InvoiceItemVarianceListResponseResultsItems
+    CatalogPricesGetParametersPriceType:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      title: CatalogPricesGetParametersPriceType
+    CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaTarget:
+      type: string
+      enum:
+      - company
+      - location_group
+      - location
+      description: 'Allowance target: company, location_group, or location'
+      title: CatalogAllowancesIdPatchRequestBodyContentApplicationJsonSchemaTarget
+    VarianceListResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VarianceListResponseResultsItems'
+      required:
+      - count
+      - results
+      title: VarianceListResponse
   securitySchemes:
     OAuth2:
       type: http
