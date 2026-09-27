@@ -1,21 +1,39 @@
 {
-  "provider": "plateiq",
+  "provider": "ottimate",
   "sources": [
-    "_original/plateiq-openapi.json"
-  ],
-  "outputs": [
+    "_original/plateiq-openapi.json",
     "plateiq-accounts-api-openapi.yml",
     "plateiq-batch-api-openapi.yml",
     "plateiq-catalog-api-openapi.yml",
     "plateiq-dimensions-api-openapi.yml",
     "plateiq-invoices-api-openapi.yml",
     "plateiq-oauth-api-openapi.yml",
-    "plateiq-purchaseorders-api-openapi.yml",
+    "plateiq-purchase-orders-api-openapi.yml",
     "plateiq-receipts-api-openapi.yml",
     "plateiq-vendors-api-openapi.yml"
   ],
+  "outputs": [
+    "ottimate-accounts-api-openapi.yml",
+    "ottimate-batch-api-openapi.yml",
+    "ottimate-catalog-api-openapi.yml",
+    "ottimate-dimensions-api-openapi.yml",
+    "ottimate-invoices-api-openapi.yml",
+    "ottimate-oauth-api-openapi.yml",
+    "ottimate-purchaseorders-api-openapi.yml",
+    "ottimate-receipts-api-openapi.yml",
+    "ottimate-vendors-api-openapi.yml",
+    "ottimate-purchase-orders-api-openapi.yml"
+  ],
   "archived": [
-    "deleted 2 superseded output(s) from the previous generation"
+    "archived openapi/plateiq-accounts-api-openapi.yml",
+    "archived openapi/plateiq-batch-api-openapi.yml",
+    "archived openapi/plateiq-catalog-api-openapi.yml",
+    "archived openapi/plateiq-dimensions-api-openapi.yml",
+    "archived openapi/plateiq-invoices-api-openapi.yml",
+    "archived openapi/plateiq-oauth-api-openapi.yml",
+    "archived openapi/plateiq-purchase-orders-api-openapi.yml",
+    "archived openapi/plateiq-receipts-api-openapi.yml",
+    "archived openapi/plateiq-vendors-api-openapi.yml"
   ],
   "errors": [],
   "warnings": [],
@@ -32,19 +50,17 @@
     "plateiq-openapi.json: declared missing tag: purchaseOrders",
     "plateiq-openapi.json: declared missing tag: receipts",
     "plateiq-openapi.json: declared missing tag: vendors",
-    "superseded outputs removed: plateiq-o-auth-api-openapi.yml, plateiq-purchase-orders-api-openapi.yml",
-    "apis.yml register: written (+2 apis, 9 total)"
+    "tag 'accounts' spans 2 source specs (plateiq-openapi.json, plateiq-accounts-api-openapi.yml): per-path servers applied",
+    "tag 'batch' spans 2 source specs (plateiq-openapi.json, plateiq-batch-api-openapi.yml): per-path servers applied",
+    "tag 'catalog' spans 2 source specs (plateiq-openapi.json, plateiq-catalog-api-openapi.yml): per-path servers applied",
+    "tag 'dimensions' spans 2 source specs (plateiq-openapi.json, plateiq-dimensions-api-openapi.yml): per-path servers applied",
+    "tag 'invoices' spans 2 source specs (plateiq-openapi.json, plateiq-invoices-api-openapi.yml): per-path servers applied",
+    "tag 'oauth' spans 2 source specs (plateiq-openapi.json, plateiq-oauth-api-openapi.yml): per-path servers applied",
+    "tag 'receipts' spans 2 source specs (plateiq-openapi.json, plateiq-receipts-api-openapi.yml): per-path servers applied",
+    "tag 'vendors' spans 2 source specs (plateiq-openapi.json, plateiq-vendors-api-openapi.yml): per-path servers applied",
+    "apis.yml register: written (+10 apis, 10 total)"
   ],
   "skipped": [
-    "_original/plateiq-openapi.yaml: archived document superseded by a larger archived document",
-    "plateiq-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-batch-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-dimensions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-invoices-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-purchase-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-receipts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "plateiq-vendors-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "_original/plateiq-openapi.yaml: archived document superseded by a larger archived document"
   ]
 }

@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Reference Dimensions API
+  title: Ottimate Dimensions API
   version: 1.0.0
+  description: 'Operations tagged dimensions across 2 of this provider''s published API definitions: plateiq-openapi.json, plateiq-dimensions-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.ottimate.com/v1
   description: Production
@@ -165,6 +166,11 @@ paths:
               - code
               - reference_id
               - erp_dimension_id
+    servers:
+    - url: https://api.ottimate.com/v1
+      description: Production
+    - url: https://sandbox-api.ottimate.com/v1
+      description: Sandbox
   /dimensions/{id}:
     get:
       operationId: get-dimensions-id
@@ -210,6 +216,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://api.ottimate.com/v1
+      description: Production
+    - url: https://sandbox-api.ottimate.com/v1
+      description: Sandbox
   /dimensions/bulk:
     post:
       operationId: post-dimensions-bulk
@@ -272,16 +283,35 @@ paths:
               required:
               - ottimate_company_id
               - dimensions
+    servers:
+    - url: https://api.ottimate.com/v1
+      description: Production
+    - url: https://sandbox-api.ottimate.com/v1
+      description: Sandbox
 components:
   schemas:
-    DimensionsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems:
+    Dimensions_get_dimensions_root_Response_200:
       type: object
       properties:
-        id:
+        version:
           type: string
-        name:
-          type: string
-      title: DimensionsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems
+        count:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        dimensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItems'
+      required:
+      - version
+      - count
+      - page
+      - limit
+      - dimensions
+      title: Dimensions_get_dimensions_root_Response_200
     DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItems:
       type: object
       properties:
@@ -315,74 +345,6 @@ components:
       - erp_type
       - erp_dimension_id
       title: DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItems
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Human-readable error message
-        request_id:
-          type: string
-          description: Unique identifier for the request
-        message:
-          description: Additional error details, can be an object, a string, or null.
-        timestamp:
-          type: string
-          description: Timestamp when error occurred
-      required:
-      - code
-      - message
-      title: ErrorResponse
-    DimensionsIdGetResponsesContentApplicationJsonSchemaDimensionOttimateType:
-      type: string
-      enum:
-      - account
-      - location
-      - department
-      - class
-      - project
-      - customer
-      - entity
-      - item
-      - warehouse
-      - task
-      - costtype
-      - employee
-      - taxcode
-      - property
-      - company
-      - subsidiary
-      description: Ottimate's standardized dimension type code.
-      title: DimensionsIdGetResponsesContentApplicationJsonSchemaDimensionOttimateType
-    DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItems:
-      type: object
-      properties:
-        erp_type:
-          type: string
-          description: The dimension category label in client's ERP system
-        ottimate_type:
-          $ref: '#/components/schemas/DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType'
-          description: Ottimate's standardized dimension type code
-        name:
-          type: string
-          description: Display name of the dimension
-        code:
-          type: string
-          description: The GL code or short identifier for this dimension
-        reference_id:
-          type: string
-          description: A unique reference identifier that tracks this dimension across all client systems
-        erp_dimension_id:
-          type: string
-          description: The identifier assigned to this dimension by the client's ERP software
-      required:
-      - erp_type
-      - ottimate_type
-      - name
-      - code
-      - reference_id
-      - erp_dimension_id
-      title: DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItems
     DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItemsOttimateType:
       type: string
       enum:
@@ -404,27 +366,6 @@ components:
       - subsidiary
       description: Ottimate's standardized dimension type code. This maps to Ottimate's internal dimension classification system, providing a consistent categorization regardless of how the client's ERP names it.
       title: DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItemsOttimateType
-    DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType:
-      type: string
-      enum:
-      - account
-      - location
-      - department
-      - class
-      - project
-      - customer
-      - entity
-      - item
-      - warehouse
-      - task
-      - costtype
-      - employee
-      - taxcode
-      - property
-      - company
-      - subsidiary
-      description: Ottimate's standardized dimension type code
-      title: DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType
     DimensionsPostResponsesContentApplicationJsonSchemaOttimateType:
       type: string
       enum:
@@ -446,39 +387,40 @@ components:
       - subsidiary
       description: Ottimate's standardized dimension type code
       title: DimensionsPostResponsesContentApplicationJsonSchemaOttimateType
-    Dimensions_get_dimensions_id_Response_200:
+    DimensionsBulkPostResponsesContentApplicationJsonSchemaCreatedItems:
       type: object
       properties:
-        version:
+        id:
           type: string
-        dimension:
-          $ref: '#/components/schemas/DimensionsIdGetResponsesContentApplicationJsonSchemaDimension'
-      required:
-      - version
-      - dimension
-      title: Dimensions_get_dimensions_id_Response_200
-    Dimensions_get_dimensions_root_Response_200:
-      type: object
-      properties:
-        version:
+        name:
           type: string
-        count:
-          type: integer
-        page:
-          type: integer
-        limit:
-          type: integer
-        dimensions:
-          type: array
-          items:
-            $ref: '#/components/schemas/DimensionsGetResponsesContentApplicationJsonSchemaDimensionsItems'
-      required:
-      - version
-      - count
-      - page
-      - limit
-      - dimensions
-      title: Dimensions_get_dimensions_root_Response_200
+      title: DimensionsBulkPostResponsesContentApplicationJsonSchemaCreatedItems
+    DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType:
+      type: string
+      enum:
+      - account
+      - location
+      - department
+      - class
+      - project
+      - customer
+      - entity
+      - item
+      - warehouse
+      - task
+      - costtype
+      - employee
+      - taxcode
+      - property
+      - company
+      - subsidiary
+      description: Ottimate's standardized dimension type code
+      title: DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType
+    DimensionsGetParametersDetail:
+      type: string
+      enum:
+      - basic
+      title: DimensionsGetParametersDetail
     Dimensions_post_dimensions_bulk_Response_201:
       type: object
       properties:
@@ -505,6 +447,48 @@ components:
           items:
             $ref: '#/components/schemas/DimensionsBulkPostResponsesContentApplicationJsonSchemaErrorsItems'
       title: Dimensions_post_dimensions_bulk_Response_201
+    DimensionsPostRequestBodyContentApplicationJsonSchemaOttimateType:
+      type: string
+      enum:
+      - account
+      - location
+      - department
+      - class
+      - project
+      - customer
+      - entity
+      - item
+      - warehouse
+      - task
+      - costtype
+      - employee
+      - taxcode
+      - property
+      - company
+      - subsidiary
+      description: Ottimate's standardized dimension type code for consistent categorization.
+      title: DimensionsPostRequestBodyContentApplicationJsonSchemaOttimateType
+    DimensionsIdGetResponsesContentApplicationJsonSchemaDimensionOttimateType:
+      type: string
+      enum:
+      - account
+      - location
+      - department
+      - class
+      - project
+      - customer
+      - entity
+      - item
+      - warehouse
+      - task
+      - costtype
+      - employee
+      - taxcode
+      - property
+      - company
+      - subsidiary
+      description: Ottimate's standardized dimension type code.
+      title: DimensionsIdGetResponsesContentApplicationJsonSchemaDimensionOttimateType
     DimensionsBulkPostResponsesContentApplicationJsonSchemaErrorsItems:
       type: object
       properties:
@@ -513,43 +497,43 @@ components:
         name:
           type: string
       title: DimensionsBulkPostResponsesContentApplicationJsonSchemaErrorsItems
-    DimensionsBulkPostResponsesContentApplicationJsonSchemaCreatedItems:
+    ErrorResponse:
       type: object
       properties:
-        id:
+        code:
           type: string
-        name:
+          description: Human-readable error message
+        request_id:
           type: string
-      title: DimensionsBulkPostResponsesContentApplicationJsonSchemaCreatedItems
-    DimensionsGetParametersDetail:
-      type: string
-      enum:
-      - basic
-      title: DimensionsGetParametersDetail
-    Dimensions_post_dimensions_root_Response_201:
+          description: Unique identifier for the request
+        message:
+          description: Additional error details, can be an object, a string, or null.
+        timestamp:
+          type: string
+          description: Timestamp when error occurred
+      required:
+      - code
+      - message
+      title: ErrorResponse
+    Dimensions_get_dimensions_id_Response_200:
       type: object
       properties:
         version:
           type: string
+        dimension:
+          $ref: '#/components/schemas/DimensionsIdGetResponsesContentApplicationJsonSchemaDimension'
+      required:
+      - version
+      - dimension
+      title: Dimensions_get_dimensions_id_Response_200
+    DimensionsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems:
+      type: object
+      properties:
         id:
           type: string
         name:
           type: string
-        erp_type:
-          type: string
-          description: The dimension category label in client's ERP system
-        code:
-          type: string
-        reference_id:
-          type: string
-        ottimate_type:
-          $ref: '#/components/schemas/DimensionsPostResponsesContentApplicationJsonSchemaOttimateType'
-          description: Ottimate's standardized dimension type code
-        erp_dimension_id:
-          type: string
-        ottimate_company_id:
-          type: integer
-      title: Dimensions_post_dimensions_root_Response_201
+      title: DimensionsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems
     DimensionsIdGetResponsesContentApplicationJsonSchemaDimension:
       type: object
       properties:
@@ -583,29 +567,64 @@ components:
       - erp_type
       - erp_dimension_id
       title: DimensionsIdGetResponsesContentApplicationJsonSchemaDimension
-    DimensionsPostRequestBodyContentApplicationJsonSchemaOttimateType:
-      type: string
-      enum:
-      - account
-      - location
-      - department
-      - class
-      - project
-      - customer
-      - entity
-      - item
-      - warehouse
-      - task
-      - costtype
-      - employee
-      - taxcode
-      - property
-      - company
-      - subsidiary
-      description: Ottimate's standardized dimension type code for consistent categorization.
-      title: DimensionsPostRequestBodyContentApplicationJsonSchemaOttimateType
+    DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItems:
+      type: object
+      properties:
+        erp_type:
+          type: string
+          description: The dimension category label in client's ERP system
+        ottimate_type:
+          $ref: '#/components/schemas/DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItemsOttimateType'
+          description: Ottimate's standardized dimension type code
+        name:
+          type: string
+          description: Display name of the dimension
+        code:
+          type: string
+          description: The GL code or short identifier for this dimension
+        reference_id:
+          type: string
+          description: A unique reference identifier that tracks this dimension across all client systems
+        erp_dimension_id:
+          type: string
+          description: The identifier assigned to this dimension by the client's ERP software
+      required:
+      - erp_type
+      - ottimate_type
+      - name
+      - code
+      - reference_id
+      - erp_dimension_id
+      title: DimensionsBulkPostRequestBodyContentApplicationJsonSchemaDimensionsItems
+    Dimensions_post_dimensions_root_Response_201:
+      type: object
+      properties:
+        version:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        erp_type:
+          type: string
+          description: The dimension category label in client's ERP system
+        code:
+          type: string
+        reference_id:
+          type: string
+        ottimate_type:
+          $ref: '#/components/schemas/DimensionsPostResponsesContentApplicationJsonSchemaOttimateType'
+          description: Ottimate's standardized dimension type code
+        erp_dimension_id:
+          type: string
+        ottimate_company_id:
+          type: integer
+      title: Dimensions_post_dimensions_root_Response_201
   securitySchemes:
     OAuth2:
       type: http
       scheme: bearer
       description: OAuth2 authentication flows. Auth server URLs will vary by environment
+x-refined-from:
+- plateiq-openapi.json
+- plateiq-dimensions-api-openapi.yml

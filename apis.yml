@@ -66,18 +66,16 @@ tags_raw:
 - Spend Management
 - ERP Integration
 apis:
-- aid: ottimate:plateiq-accounts-api
-  name: PlateIQ accounts API
-  description: The accounts API from PlateIQ — 3 operation(s) for accounts.
+- aid: ottimate:ottimate-accounts-api
+  name: Ottimate Accounts API
+  description: The accounts API from Ottimate — 3 operation(s) for accounts.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Account
-  tags_raw:
   - accounts
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-accounts-api-openapi.yml
+    url: openapi/ottimate-accounts-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -88,18 +86,16 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-batch-api
-  name: PlateIQ batch API
-  description: The batch API from PlateIQ — 3 operation(s) for batch.
+- aid: ottimate:ottimate-batch-api
+  name: Ottimate Batch API
+  description: The batch API from Ottimate — 3 operation(s) for batch.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Batch
-  tags_raw:
   - batch
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-batch-api-openapi.yml
+    url: openapi/ottimate-batch-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -110,18 +106,16 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-catalog-api
-  name: PlateIQ catalog API
-  description: The catalog API from PlateIQ — 12 operation(s) for catalog.
+- aid: ottimate:ottimate-catalog-api
+  name: Ottimate Catalog API
+  description: The catalog API from Ottimate — 12 operation(s) for catalog.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Catalog
-  tags_raw:
   - catalog
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-catalog-api-openapi.yml
+    url: openapi/ottimate-catalog-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -132,18 +126,16 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-dimensions-api
-  name: PlateIQ dimensions API
-  description: The dimensions API from PlateIQ — 3 operation(s) for dimensions.
+- aid: ottimate:ottimate-dimensions-api
+  name: Ottimate Dimensions API
+  description: The dimensions API from Ottimate — 3 operation(s) for dimensions.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Dimensions
-  tags_raw:
   - dimensions
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-dimensions-api-openapi.yml
+    url: openapi/ottimate-dimensions-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -154,18 +146,16 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-invoices-api
-  name: PlateIQ invoices API
-  description: The invoices API from PlateIQ — 11 operation(s) for invoices.
+- aid: ottimate:ottimate-invoices-api
+  name: Ottimate Invoices API
+  description: The invoices API from Ottimate — 11 operation(s) for invoices.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Invoices
-  tags_raw:
   - invoices
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-invoices-api-openapi.yml
+    url: openapi/ottimate-invoices-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -176,62 +166,16 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-receipts-api
-  name: PlateIQ receipts API
-  description: The receipts API from PlateIQ — 3 operation(s) for receipts.
+- aid: ottimate:ottimate-oauth-api
+  name: Ottimate OAuth API
+  description: The oauth API from Ottimate — 1 operation(s) for oauth.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
-  - Receipts
-  tags_raw:
-  - receipts
-  properties:
-  - type: OpenAPI
-    url: openapi/plateiq-receipts-api-openapi.yml
-  - type: Documentation
-    url: https://docs.ottimate.com/welcome
-  - type: APIReference
-    url: https://docs.ottimate.com/api-reference
-  - type: GettingStarted
-    url: https://docs.ottimate.com/integration-journey
-  - type: Authentication
-    url: authentication/plateiq-authentication.yml
-  - type: Sandbox
-    url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-vendors-api
-  name: PlateIQ vendors API
-  description: The vendors API from PlateIQ — 3 operation(s) for vendors.
-  humanURL: https://docs.ottimate.com/welcome
-  baseURL: https://api.ottimate.com/v1
-  tags:
-  - Vendors
-  tags_raw:
-  - vendors
-  properties:
-  - type: OpenAPI
-    url: openapi/plateiq-vendors-api-openapi.yml
-  - type: Documentation
-    url: https://docs.ottimate.com/welcome
-  - type: APIReference
-    url: https://docs.ottimate.com/api-reference
-  - type: GettingStarted
-    url: https://docs.ottimate.com/integration-journey
-  - type: Authentication
-    url: authentication/plateiq-authentication.yml
-  - type: Sandbox
-    url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-oauth-api
-  name: PlateIQ OAUTH API
-  description: The oauth API from PlateIQ — 1 operation(s) for oauth.
-  humanURL: https://docs.ottimate.com/welcome
-  baseURL: https://api.ottimate.com/v1
-  tags:
-  - Authentication
-  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-oauth-api-openapi.yml
+    url: openapi/ottimate-oauth-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
@@ -242,16 +186,56 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:plateiq-purchase-orders-api
-  name: PlateIQ Purchase Orders API
-  description: The Purchase Orders API from PlateIQ — 3 operation(s) for purchase orders.
+- aid: ottimate:ottimate-purchase-orders-api
+  name: Ottimate Purchase Orders API
+  description: The Purchase Orders API from Ottimate — 3 operation(s) for purchase orders.
   humanURL: https://docs.ottimate.com/welcome
   baseURL: https://api.ottimate.com/v1
   tags:
   - Purchase Orders
   properties:
   - type: OpenAPI
-    url: openapi/plateiq-purchase-orders-api-openapi.yml
+    url: openapi/ottimate-purchase-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.ottimate.com/welcome
+  - type: APIReference
+    url: https://docs.ottimate.com/api-reference
+  - type: GettingStarted
+    url: https://docs.ottimate.com/integration-journey
+  - type: Authentication
+    url: authentication/plateiq-authentication.yml
+  - type: Sandbox
+    url: sandbox/plateiq-sandbox.yml
+- aid: ottimate:ottimate-receipts-api
+  name: Ottimate Receipts API
+  description: The receipts API from Ottimate — 3 operation(s) for receipts.
+  humanURL: https://docs.ottimate.com/welcome
+  baseURL: https://api.ottimate.com/v1
+  tags:
+  - receipts
+  properties:
+  - type: OpenAPI
+    url: openapi/ottimate-receipts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.ottimate.com/welcome
+  - type: APIReference
+    url: https://docs.ottimate.com/api-reference
+  - type: GettingStarted
+    url: https://docs.ottimate.com/integration-journey
+  - type: Authentication
+    url: authentication/plateiq-authentication.yml
+  - type: Sandbox
+    url: sandbox/plateiq-sandbox.yml
+- aid: ottimate:ottimate-vendors-api
+  name: Ottimate Vendors API
+  description: The vendors API from Ottimate — 3 operation(s) for vendors.
+  humanURL: https://docs.ottimate.com/welcome
+  baseURL: https://api.ottimate.com/v1
+  tags:
+  - vendors
+  properties:
+  - type: OpenAPI
+    url: openapi/ottimate-vendors-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference
