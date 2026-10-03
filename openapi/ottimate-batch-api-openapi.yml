@@ -1,8 +1,7 @@
 openapi: 3.2.0
 info:
-  title: Ottimate Batch API
+  title: Reference Batch API
   version: 1.0.0
-  description: 'Operations tagged batch across 2 of this provider''s published API definitions: plateiq-openapi.json, plateiq-batch-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.ottimate.com/v1
   description: Production
@@ -62,11 +61,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
   /batch/{id}/results:
     get:
       operationId: get-batch-id-results
@@ -118,11 +112,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
   /batch:
     get:
       operationId: get-batch-root
@@ -214,20 +203,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
 components:
   schemas:
-    BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus:
+    BatchGetParametersStatus:
       type: string
       enum:
       - processing
       - completed
-      description: '`processing` while tasks are running; `completed` when all tasks have finished'
-      title: BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus
+      title: BatchGetParametersStatus
+    BatchResultsResponseResultsItems:
+      type: object
+      properties:
+        task:
+          type: integer
+          description: Internal task ID
+        result:
+          description: The outcome of the task (e.g. the created/updated resource). Null if the task failed.
+        message:
+          type: string
+          description: Error message if the task failed. Null on success.
+      required:
+      - task
+      title: BatchResultsResponseResultsItems
+    BatchProgressResponse:
+      type: object
+      properties:
+        version:
+          type: string
+        batch_id:
+          type: string
+          description: The batch identifier
+        progress:
+          type: number
+          format: double
+          description: Fraction of tasks completed (0.0 to 1.0). Value of 1.0 means all tasks have finished (success or failure).
+        tasks_count:
+          type: integer
+          description: Total number of tasks in the batch
+        tasks_completed:
+          type: integer
+          description: Number of tasks that completed successfully
+        tasks_failed:
+          type: integer
+          description: Number of tasks that failed
+        status:
+          $ref: '#/components/schemas/BatchProgressResponseStatus'
+          description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
+        results_url:
+          type:
+          - string
+          - 'null'
+          description: URL to fetch per-task results. Present only when `status` is `completed`.
+        error:
+          type:
+          - string
+          - 'null'
+          description: Error message when all tasks in the batch failed. Null otherwise.
+      required:
+      - version
+      - batch_id
+      - progress
+      - tasks_count
+      - tasks_completed
+      - tasks_failed
+      - status
+      title: BatchProgressResponse
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Human-readable error message
+        request_id:
+          type: string
+          description: Unique identifier for the request
+        message:
+          description: Additional error details, can be an object, a string, or null.
+        timestamp:
+          type: string
+          description: Timestamp when error occurred
+      required:
+      - code
+      - message
+      title: ErrorResponse
+    BatchProgressResponseStatus:
+      type: string
+      enum:
+      - processing
+      - completed
+      description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
+      title: BatchProgressResponseStatus
+    BatchResultsResponse:
+      type: object
+      properties:
+        version:
+          type: string
+        batch_id:
+          type: string
+          description: The batch identifier
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchResultsResponseResultsItems'
+          description: One entry per task in the batch
+      required:
+      - version
+      - batch_id
+      - results
+      title: BatchResultsResponse
     Batch_get_batch_root_Response_200:
       type: object
       properties:
@@ -278,117 +361,15 @@ components:
       - tasks_failed
       - modified_at
       title: BatchGetResponsesContentApplicationJsonSchemaResultsItems
-    BatchResultsResponseResultsItems:
-      type: object
-      properties:
-        task:
-          type: integer
-          description: Internal task ID
-        result:
-          description: The outcome of the task (e.g. the created/updated resource). Null if the task failed.
-        message:
-          type: string
-          description: Error message if the task failed. Null on success.
-      required:
-      - task
-      title: BatchResultsResponseResultsItems
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Human-readable error message
-        request_id:
-          type: string
-          description: Unique identifier for the request
-        message:
-          description: Additional error details, can be an object, a string, or null.
-        timestamp:
-          type: string
-          description: Timestamp when error occurred
-      required:
-      - code
-      - message
-      title: ErrorResponse
-    BatchResultsResponse:
-      type: object
-      properties:
-        version:
-          type: string
-        batch_id:
-          type: string
-          description: The batch identifier
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchResultsResponseResultsItems'
-          description: One entry per task in the batch
-      required:
-      - version
-      - batch_id
-      - results
-      title: BatchResultsResponse
-    BatchProgressResponse:
-      type: object
-      properties:
-        version:
-          type: string
-        batch_id:
-          type: string
-          description: The batch identifier
-        progress:
-          type: number
-          format: double
-          description: Fraction of tasks completed (0.0 to 1.0). Value of 1.0 means all tasks have finished (success or failure).
-        tasks_count:
-          type: integer
-          description: Total number of tasks in the batch
-        tasks_completed:
-          type: integer
-          description: Number of tasks that completed successfully
-        tasks_failed:
-          type: integer
-          description: Number of tasks that failed
-        status:
-          $ref: '#/components/schemas/BatchProgressResponseStatus'
-          description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
-        results_url:
-          type:
-          - string
-          - 'null'
-          description: URL to fetch per-task results. Present only when `status` is `completed`.
-        error:
-          type:
-          - string
-          - 'null'
-          description: Error message when all tasks in the batch failed. Null otherwise.
-      required:
-      - version
-      - batch_id
-      - progress
-      - tasks_count
-      - tasks_completed
-      - tasks_failed
-      - status
-      title: BatchProgressResponse
-    BatchGetParametersStatus:
+    BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus:
       type: string
       enum:
       - processing
       - completed
-      title: BatchGetParametersStatus
-    BatchProgressResponseStatus:
-      type: string
-      enum:
-      - processing
-      - completed
-      description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
-      title: BatchProgressResponseStatus
+      description: '`processing` while tasks are running; `completed` when all tasks have finished'
+      title: BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus
   securitySchemes:
     OAuth2:
       type: http
       scheme: bearer
       description: OAuth2 authentication flows. Auth server URLs will vary by environment
-x-refined-from:
-- plateiq-openapi.json
-- plateiq-batch-api-openapi.yml

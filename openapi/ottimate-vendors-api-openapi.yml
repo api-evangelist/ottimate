@@ -1,8 +1,7 @@
 openapi: 3.2.0
 info:
-  title: Ottimate Vendors API
+  title: Reference Vendors API
   version: 1.0.0
-  description: 'Operations tagged vendors across 2 of this provider''s published API definitions: plateiq-openapi.json, plateiq-vendors-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.ottimate.com/v1
   description: Production
@@ -189,11 +188,6 @@ paths:
               - ottimate_company_id
               - erp_vendor_name
               - erp_vendor_id
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
   /vendors/{id}:
     get:
       operationId: get-vendors-id
@@ -239,11 +233,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
   /vendors/bulk:
     post:
       operationId: post-vendors-bulk
@@ -304,11 +293,6 @@ paths:
                     $ref: '#/components/schemas/VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItems'
               required:
               - ottimate_company_id
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
 components:
   schemas:
     VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItemsPaymentMethod:
@@ -320,50 +304,65 @@ components:
       - wire_transfer
       - unknown
       title: VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItemsPaymentMethod
-    VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod:
-      type: string
-      enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      title: VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod
-    VendorsGetParametersDetail:
-      type: string
-      enum:
-      - basic
-      title: VendorsGetParametersDetail
-    Vendors_post_vendors_root_Response_201:
+    VendorsIdGetResponsesContentApplicationJsonSchemaVendor:
       type: object
       properties:
-        version:
+        id:
+          type: integer
+        ottimate_company_id:
+          type: integer
+        company_name:
           type: string
-        vendor:
-          $ref: '#/components/schemas/VendorsPostResponsesContentApplicationJsonSchemaVendor'
+        erp_vendor_id:
+          type:
+          - string
+          - 'null'
+        erp_vendor_name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        net_terms:
+          type:
+          - string
+          - 'null'
+        payment_method:
+          oneOf:
+          - $ref: '#/components/schemas/VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod'
+          - type: 'null'
+        address_line_1:
+          type:
+          - string
+          - 'null'
+        address_line_2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        zipcode:
+          type:
+          - string
+          - 'null'
       required:
-      - version
-      - vendor
-      title: Vendors_post_vendors_root_Response_201
-    VendorsPostRequestBodyContentApplicationJsonSchemaPaymentMethod:
-      type: string
-      enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      description: (Optional) Vendor payment method
-      title: VendorsPostRequestBodyContentApplicationJsonSchemaPaymentMethod
-    VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItemsPaymentMethod:
-      type: string
-      enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      title: VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItemsPaymentMethod
+      - id
+      - ottimate_company_id
+      - erp_vendor_id
+      - erp_vendor_name
+      title: VendorsIdGetResponsesContentApplicationJsonSchemaVendor
     VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItems:
       type: object
       properties:
@@ -416,17 +415,148 @@ components:
           - string
           - 'null'
       title: VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItems
-    Vendors_get_vendors_id_Response_200:
+    Vendors_post_vendors_bulk_Response_201:
       type: object
       properties:
         version:
           type: string
-        vendor:
-          $ref: '#/components/schemas/VendorsIdGetResponsesContentApplicationJsonSchemaVendor'
+        success_count:
+          type: integer
+        created_count:
+          type: integer
+        updated_count:
+          type: integer
+        error_count:
+          type: integer
+        created:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItems'
+        updated:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaErrorsItems'
+      title: Vendors_post_vendors_bulk_Response_201
+    VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      title: VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod
+    VendorsGetResponsesContentApplicationJsonSchemaVendorsItems:
+      type: object
+      properties:
+        id:
+          type: integer
+        ottimate_company_id:
+          type: integer
+        company_name:
+          type: string
+        erp_vendor_id:
+          type:
+          - string
+          - 'null'
+        erp_vendor_name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        net_terms:
+          type:
+          - string
+          - 'null'
+        payment_method:
+          oneOf:
+          - $ref: '#/components/schemas/VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod'
+          - type: 'null'
+        address_line_1:
+          type:
+          - string
+          - 'null'
+        address_line_2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        zipcode:
+          type:
+          - string
+          - 'null'
+        last_modified_date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        last_modified_date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
       required:
-      - version
-      - vendor
-      title: Vendors_get_vendors_id_Response_200
+      - id
+      - erp_vendor_name
+      title: VendorsGetResponsesContentApplicationJsonSchemaVendorsItems
+    VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItems:
+      type: object
+      properties:
+        erp_vendor_name:
+          type: string
+          description: Vendor name
+        erp_vendor_id:
+          type: string
+          description: Unique vendor ID in ERP system
+        email:
+          type: string
+          description: (Optional) Vendor email
+        phone:
+          type: string
+          description: (Optional) Vendor phone number
+        net_terms:
+          type: string
+          description: (Optional) Payment terms
+        payment_method:
+          $ref: '#/components/schemas/VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod'
+          description: (Optional) Vendor payment method
+        address_line_1:
+          type: string
+          description: (Optional) Vendor address line 1
+        address_line_2:
+          type: string
+          description: (Optional) Vendor address line 2
+        city:
+          type: string
+          description: (Optional) Vendor city
+        state:
+          type: string
+          description: (Optional) Vendor state
+        zipcode:
+          type: string
+          description: (Optional) Vendor zipcode
+      required:
+      - erp_vendor_id
+      title: VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItems
     VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems:
       type: object
       properties:
@@ -479,6 +609,57 @@ components:
           - string
           - 'null'
       title: VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems
+    Vendors_get_vendors_root_Response_200:
+      type: object
+      properties:
+        version:
+          type: string
+        count:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        vendors:
+          type: array
+          items:
+            $ref: '#/components/schemas/VendorsGetResponsesContentApplicationJsonSchemaVendorsItems'
+      required:
+      - version
+      - count
+      - page
+      - limit
+      - vendors
+      title: Vendors_get_vendors_root_Response_200
+    VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      description: (Optional) Vendor payment method
+      title: VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod
+    VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      title: VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod
+    VendorsPostRequestBodyContentApplicationJsonSchemaPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      description: (Optional) Vendor payment method
+      title: VendorsPostRequestBodyContentApplicationJsonSchemaPaymentMethod
     ErrorResponse:
       type: object
       properties:
@@ -497,6 +678,46 @@ components:
       - code
       - message
       title: ErrorResponse
+    Vendors_post_vendors_root_Response_201:
+      type: object
+      properties:
+        version:
+          type: string
+        vendor:
+          $ref: '#/components/schemas/VendorsPostResponsesContentApplicationJsonSchemaVendor'
+      required:
+      - version
+      - vendor
+      title: Vendors_post_vendors_root_Response_201
+    VendorsPostResponsesContentApplicationJsonSchemaVendorPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      title: VendorsPostResponsesContentApplicationJsonSchemaVendorPaymentMethod
+    VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItemsPaymentMethod:
+      type: string
+      enum:
+      - credit_card
+      - ach
+      - check
+      - wire_transfer
+      - unknown
+      title: VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItemsPaymentMethod
+    Vendors_get_vendors_id_Response_200:
+      type: object
+      properties:
+        version:
+          type: string
+        vendor:
+          $ref: '#/components/schemas/VendorsIdGetResponsesContentApplicationJsonSchemaVendor'
+      required:
+      - version
+      - vendor
+      title: Vendors_get_vendors_id_Response_200
     VendorsBulkPostResponsesContentApplicationJsonSchemaErrorsItems:
       type: object
       properties:
@@ -566,253 +787,13 @@ components:
       - id
       - ottimate_company_id
       title: VendorsPostResponsesContentApplicationJsonSchemaVendor
-    VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItems:
-      type: object
-      properties:
-        erp_vendor_name:
-          type: string
-          description: Vendor name
-        erp_vendor_id:
-          type: string
-          description: Unique vendor ID in ERP system
-        email:
-          type: string
-          description: (Optional) Vendor email
-        phone:
-          type: string
-          description: (Optional) Vendor phone number
-        net_terms:
-          type: string
-          description: (Optional) Payment terms
-        payment_method:
-          $ref: '#/components/schemas/VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod'
-          description: (Optional) Vendor payment method
-        address_line_1:
-          type: string
-          description: (Optional) Vendor address line 1
-        address_line_2:
-          type: string
-          description: (Optional) Vendor address line 2
-        city:
-          type: string
-          description: (Optional) Vendor city
-        state:
-          type: string
-          description: (Optional) Vendor state
-        zipcode:
-          type: string
-          description: (Optional) Vendor zipcode
-      required:
-      - erp_vendor_id
-      title: VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItems
-    VendorsGetResponsesContentApplicationJsonSchemaVendorsItems:
-      type: object
-      properties:
-        id:
-          type: integer
-        ottimate_company_id:
-          type: integer
-        company_name:
-          type: string
-        erp_vendor_id:
-          type:
-          - string
-          - 'null'
-        erp_vendor_name:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        phone:
-          type:
-          - string
-          - 'null'
-        net_terms:
-          type:
-          - string
-          - 'null'
-        payment_method:
-          oneOf:
-          - $ref: '#/components/schemas/VendorsGetResponsesContentApplicationJsonSchemaVendorsItemsPaymentMethod'
-          - type: 'null'
-        address_line_1:
-          type:
-          - string
-          - 'null'
-        address_line_2:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        state:
-          type:
-          - string
-          - 'null'
-        zipcode:
-          type:
-          - string
-          - 'null'
-        last_modified_date:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        last_modified_date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of last_modified_date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-      required:
-      - id
-      - erp_vendor_name
-      title: VendorsGetResponsesContentApplicationJsonSchemaVendorsItems
-    VendorsPostResponsesContentApplicationJsonSchemaVendorPaymentMethod:
+    VendorsGetParametersDetail:
       type: string
       enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      title: VendorsPostResponsesContentApplicationJsonSchemaVendorPaymentMethod
-    Vendors_get_vendors_root_Response_200:
-      type: object
-      properties:
-        version:
-          type: string
-        count:
-          type: integer
-        page:
-          type: integer
-        limit:
-          type: integer
-        vendors:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorsGetResponsesContentApplicationJsonSchemaVendorsItems'
-      required:
-      - version
-      - count
-      - page
-      - limit
-      - vendors
-      title: Vendors_get_vendors_root_Response_200
-    VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod:
-      type: string
-      enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      description: (Optional) Vendor payment method
-      title: VendorsBulkPostRequestBodyContentApplicationJsonSchemaVendorsItemsPaymentMethod
-    VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod:
-      type: string
-      enum:
-      - credit_card
-      - ach
-      - check
-      - wire_transfer
-      - unknown
-      title: VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod
-    VendorsIdGetResponsesContentApplicationJsonSchemaVendor:
-      type: object
-      properties:
-        id:
-          type: integer
-        ottimate_company_id:
-          type: integer
-        company_name:
-          type: string
-        erp_vendor_id:
-          type:
-          - string
-          - 'null'
-        erp_vendor_name:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        phone:
-          type:
-          - string
-          - 'null'
-        net_terms:
-          type:
-          - string
-          - 'null'
-        payment_method:
-          oneOf:
-          - $ref: '#/components/schemas/VendorsIdGetResponsesContentApplicationJsonSchemaVendorPaymentMethod'
-          - type: 'null'
-        address_line_1:
-          type:
-          - string
-          - 'null'
-        address_line_2:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        state:
-          type:
-          - string
-          - 'null'
-        zipcode:
-          type:
-          - string
-          - 'null'
-      required:
-      - id
-      - ottimate_company_id
-      - erp_vendor_id
-      - erp_vendor_name
-      title: VendorsIdGetResponsesContentApplicationJsonSchemaVendor
-    Vendors_post_vendors_bulk_Response_201:
-      type: object
-      properties:
-        version:
-          type: string
-        success_count:
-          type: integer
-        created_count:
-          type: integer
-        updated_count:
-          type: integer
-        error_count:
-          type: integer
-        created:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaCreatedItems'
-        updated:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaUpdatedItems'
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/VendorsBulkPostResponsesContentApplicationJsonSchemaErrorsItems'
-      title: Vendors_post_vendors_bulk_Response_201
+      - basic
+      title: VendorsGetParametersDetail
   securitySchemes:
     OAuth2:
       type: http
       scheme: bearer
       description: OAuth2 authentication flows. Auth server URLs will vary by environment
-x-refined-from:
-- plateiq-openapi.json
-- plateiq-vendors-api-openapi.yml

@@ -186,26 +186,6 @@ apis:
     url: authentication/plateiq-authentication.yml
   - type: Sandbox
     url: sandbox/plateiq-sandbox.yml
-- aid: ottimate:ottimate-purchase-orders-api
-  name: Ottimate Purchase Orders API
-  description: The Purchase Orders API from Ottimate — 3 operation(s) for purchase orders.
-  humanURL: https://docs.ottimate.com/welcome
-  baseURL: https://api.ottimate.com/v1
-  tags:
-  - Purchase Orders
-  properties:
-  - type: OpenAPI
-    url: openapi/ottimate-purchase-orders-api-openapi.yml
-  - type: Documentation
-    url: https://docs.ottimate.com/welcome
-  - type: APIReference
-    url: https://docs.ottimate.com/api-reference
-  - type: GettingStarted
-    url: https://docs.ottimate.com/integration-journey
-  - type: Authentication
-    url: authentication/plateiq-authentication.yml
-  - type: Sandbox
-    url: sandbox/plateiq-sandbox.yml
 - aid: ottimate:ottimate-receipts-api
   name: Ottimate Receipts API
   description: The receipts API from Ottimate — 3 operation(s) for receipts.
@@ -236,6 +216,26 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/ottimate-vendors-api-openapi.yml
+  - type: Documentation
+    url: https://docs.ottimate.com/welcome
+  - type: APIReference
+    url: https://docs.ottimate.com/api-reference
+  - type: GettingStarted
+    url: https://docs.ottimate.com/integration-journey
+  - type: Authentication
+    url: authentication/plateiq-authentication.yml
+  - type: Sandbox
+    url: sandbox/plateiq-sandbox.yml
+- aid: ottimate:ottimate-purchase-orders-api
+  name: Ottimate Purchase Orders API
+  description: The Purchase Orders API from Ottimate — 3 operation(s) for purchase orders.
+  humanURL: https://docs.ottimate.com/welcome
+  baseURL: https://api.ottimate.com/v1
+  tags:
+  - Purchase Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/ottimate-purchase-orders-api-openapi.yml
   - type: Documentation
     url: https://docs.ottimate.com/welcome
   - type: APIReference

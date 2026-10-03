@@ -1,8 +1,7 @@
 openapi: 3.2.0
 info:
-  title: Ottimate OAuth API
+  title: Reference OAuth API
   version: 1.0.0
-  description: 'Operations tagged oauth across 2 of this provider''s published API definitions: plateiq-openapi.json, plateiq-oauth-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.ottimate.com/v1
   description: Production
@@ -73,13 +72,30 @@ paths:
               - grant_type
               - client_id
               - client_secret
-    servers:
-    - url: https://api.ottimate.com/v1
-      description: Production
-    - url: https://sandbox-api.ottimate.com/v1
-      description: Sandbox
 components:
   schemas:
+    OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType:
+      type: string
+      enum:
+      - client_credentials
+      description: Grant type for the request. Must be 'client_credentials'.
+      title: OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType
+    Oauth_post_oauth_token_Response_200:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: The access token.
+        token_type:
+          type: string
+          description: The type of the token (e.g., Bearer).
+        expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token.
+        scope:
+          type: string
+          description: The scope of the access token.
+      title: Oauth_post_oauth_token_Response_200
     ErrorResponse:
       type: object
       properties:
@@ -98,33 +114,8 @@ components:
       - code
       - message
       title: ErrorResponse
-    Oauth_post_oauth_token_Response_200:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: The access token.
-        token_type:
-          type: string
-          description: The type of the token (e.g., Bearer).
-        expires_in:
-          type: integer
-          description: The lifetime in seconds of the access token.
-        scope:
-          type: string
-          description: The scope of the access token.
-      title: Oauth_post_oauth_token_Response_200
-    OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType:
-      type: string
-      enum:
-      - client_credentials
-      description: Grant type for the request. Must be 'client_credentials'.
-      title: OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType
   securitySchemes:
     OAuth2:
       type: http
       scheme: bearer
       description: OAuth2 authentication flows. Auth server URLs will vary by environment
-x-refined-from:
-- plateiq-openapi.json
-- plateiq-oauth-api-openapi.yml
