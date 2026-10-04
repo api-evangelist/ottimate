@@ -1256,18 +1256,346 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    InvoiceDetailObjectDimensions:
+    InvoiceObjectImagesItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique image identifier
+        url:
+          type: string
+          description: CDN URL to the invoice image
+      title: InvoiceObjectImagesItems
+    InvoiceDetailObjectGlSplitsItemsDimensions:
       type: object
       properties: {}
-      description: Header-level dimension mappings. Contains accounting dimensions assigned to the invoice header (e.g., Department, Class, Location).
-      title: InvoiceDetailObjectDimensions
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaType:
+      description: Accounting dimensions for this split. Same structure as header-level dimensions. Keys are dimension type codes.
+      title: InvoiceDetailObjectGlSplitsItemsDimensions
+    Invoices_get_invoices_receiver-export_Response_200:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of invoices matching the query
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: URL for the next page of results, or null if on the last page
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: URL for the previous page of results, or null if on the first page
+        page:
+          type: integer
+          description: Current page number
+        per_page:
+          type: integer
+          description: Number of results per page
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItems'
+      title: Invoices_get_invoices_receiver-export_Response_200
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems:
+      type: object
+      properties:
+        name:
+          type: string
+        sku:
+          type: string
+        quantity:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        is_taxed:
+          type: boolean
+        dimensions:
+          oneOf:
+          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions'
+          - type: 'null'
+          description: 'Item-level dimension mappings. Same format as header-level dimensions: keys are dimension types and values are `erp_dimension_id` strings. If omitted, no item-level dimensions are set.'
+        custom_fields:
+          oneOf:
+          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields'
+          - type: 'null'
+          description: 'Item-level custom metadata fields. Keys and value types are validated against the invoice item custom field spec configured for your account in Ottimate.
+
+
+            **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
+
+
+            **Behaviour**: Omitted keys are filled with their configured default values.'
+      required:
+      - name
+      - quantity
+      - price
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItems:
+      type: object
+      properties:
+        upload_id:
+          type: string
+          description: A mandatory unique identifier for creating an invoice.
+        ottimate_location_id:
+          type: integer
+          description: The ID of the location for this invoice.
+        erp_vendor_id:
+          type: string
+          description: The ERP ID of the vendor for this invoice.
+        invoice_number:
+          type: string
+        invoice_date:
+          type: string
+          format: date
+        due_date:
+          type: string
+          format: date
+        posting_date:
+          type: string
+          format: date
+        total_amount:
+          type: number
+          format: double
+        total_tax:
+          type: number
+          format: double
+        purchase_order:
+          type: string
+        notes:
+          type: string
+        currency:
+          type: string
+        type:
+          $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType'
+          description: Type of document.
+        dimensions:
+          oneOf:
+          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions'
+          - type: 'null'
+          description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT', 'CLASS') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. If omitted, no dimensions are set. Invalid dimension types or IDs return a `400` error.
+        custom_fields:
+          oneOf:
+          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields'
+          - type: 'null'
+          description: 'Header-level custom metadata fields for this invoice. Keys and value types are validated against the custom field spec configured for your account in Ottimate.
+
+
+            **Requirements**: Custom fields must be configured for your account before use. Sending `custom_fields` when no spec is configured returns a `400` error. Unrecognised keys return a `400` error.
+
+
+            **Behaviour**: Omitted keys are filled with their configured default values.'
+        image_urls:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: 'List of HTTPS image URLs to attach to the invoice. Supported formats: PDF, JPG, JPEG, PNG. raw_images is not supported for bulk import.'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems'
+          description: Line items to create for the invoice.
+      required:
+      - upload_id
+      - ottimate_location_id
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItems
+    InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Invoice ID
+        invoice_number:
+          type: string
+          description: Invoice number
+        status:
+          type: string
+          description: Invoice status after flagging
+      title: InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType:
       type: string
       enum:
       - invoice
       - credit_memo
       description: Type of document.
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaType
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType
+    InvoiceDetailObjectGlSplitsItemsCustomFields:
+      type: object
+      properties: {}
+      description: Custom metadata fields for this split
+      title: InvoiceDetailObjectGlSplitsItemsCustomFields
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions:
+      type: object
+      properties: {}
+      description: Item-level dimension mappings. Keys are dimension types, values are `erp_dimension_id` strings. Merges with existing dimensions. Set a value to `null` to remove only that dimension. Pass `{}` or omit the field to preserve existing dimensions.
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions
+    ApproverObjectPolicy:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Policy ID
+        name:
+          type: string
+          description: Policy name
+      description: Policy that assigned this approver (null if manually added)
+      title: ApproverObjectPolicy
+    InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+      title: InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems
+    InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItemsReceiverLinesItems:
+      type: object
+      properties:
+        catalog_unique_key:
+          type:
+          - string
+          - 'null'
+          description: Unique key identifying the matched catalog entry, suitable for cross-referencing with your catalog system
+        upc:
+          type: string
+          description: Universal Product Code from the catalog entry, zero-padded to 13 digits (EAN-13 / GTIN-13). Empty string if no UPC is on file
+        description:
+          type: string
+          description: Item name sourced from the matched catalog entry
+        uom:
+          type: string
+          description: Catalog-normalized unit of measure (e.g. CS, EA, LB). Always reflects the catalog UOM, not the raw invoice UOM
+        case_pack:
+          type: number
+          format: double
+          description: Number of units per case as defined in the catalog entry
+        quantity_received:
+          type: number
+          format: double
+          description: UOM-normalized received quantity. For unit-matched lines billed per unit (UNIT_PRICE), the raw quantity is divided by case_pack to convert to cases. For all other matches the raw invoice quantity is returned as-is
+        unit_price:
+          type: number
+          format: double
+          description: Absolute unit price from the invoice line item
+        extended_price:
+          type: number
+          format: double
+          description: Absolute extended (total) price for this line item
+        pack_size:
+          type:
+          - string
+          - 'null'
+          description: Human-readable pack size description from the catalog entry (e.g. '25 LB', '6 CT')
+        vendor_id:
+          type:
+          - string
+          - 'null'
+          description: Vendor identifier for the inventory system (e.g. LOCSMS). Sourced from the vendor configuration on the location, not the invoice vendor object
+        ottimate_catalog_id:
+          type: string
+          description: Ottimate-internal catalog entry identifier for audit and lookup. Not recognized by LOCSMS or servicers
+      title: InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItemsReceiverLinesItems
+    Invoices_patch_invoices_id_images_Response_200:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems'
+        image_errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems'
+          description: Always empty on 200.
+      title: Invoices_patch_invoices_id_images_Response_200
+    InvoiceDetailObjectLastModifiedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+      description: User who last modified the invoice
+      title: InvoiceDetailObjectLastModifiedUser
+    InvoiceDetailObjectDimensions:
+      type: object
+      properties: {}
+      description: Header-level dimension mappings. Contains accounting dimensions assigned to the invoice header (e.g., Department, Class, Location).
+      title: InvoiceDetailObjectDimensions
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Existing item ID to update. Omit to create a new item.
+        item:
+          type: integer
+          description: Inventory item ID
+        name:
+          type: string
+        sku:
+          type: string
+        quantity:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        is_taxed:
+          type: boolean
+        dimensions:
+          $ref: '#/components/schemas/InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions'
+          description: Item-level dimension mappings. Keys are dimension types, values are `erp_dimension_id` strings. Merges with existing dimensions. Set a value to `null` to remove only that dimension. Pass `{}` or omit the field to preserve existing dimensions.
+        custom_fields:
+          oneOf:
+          - $ref: '#/components/schemas/InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields'
+          - type: 'null'
+          description: 'Item-level custom metadata fields. Replaces the stored item custom fields — omitted keys are reset to their configured default values.
+
+
+            **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.'
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItems
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions:
+      type: object
+      properties: {}
+      description: 'Item-level dimension mappings. Same format as header-level dimensions: keys are dimension types and values are `erp_dimension_id` strings. If omitted, no item-level dimensions are set.'
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions
+    InvoiceObjectLastModifiedUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+      description: User who last modified the invoice
+      title: InvoiceObjectLastModifiedUser
+    InvoiceDetailObjectPaymentInfo:
+      type: object
+      properties:
+        payment_method:
+          type: string
+          description: Method used for payment
+        reference:
+          type: string
+          description: Payment reference number
+      description: Payment information (only present if payment_status is 'paid')
+      title: InvoiceDetailObjectPaymentInfo
     ApproverObjectApprover:
       type: object
       properties:
@@ -1283,11 +1611,265 @@ components:
           description: User display name
       description: Approver user details
       title: ApproverObjectApprover
-    InvoiceDetailObjectGlSplitsItemsDimensions:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Human-readable error message
+        request_id:
+          type: string
+          description: Unique identifier for the request
+        message:
+          description: Additional error details, can be an object, a string, or null.
+        timestamp:
+          type: string
+          description: Timestamp when error occurred
+      required:
+      - code
+      - message
+      title: ErrorResponse
+    InstantCaptureFileObject:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique file identifier
+        filename:
+          type: string
+          description: Name of the file
+        status:
+          type: string
+          description: Processing status of the file
+        date:
+          type: string
+          format: date-time
+          description: Date when the file was uploaded
+        no_of_pages:
+          type: integer
+          description: Number of pages in the file
+        ottimate_location_name:
+          type: string
+          description: Name of the location
+        preview_url:
+          type: string
+          description: URL to preview the file
+      required:
+      - id
+      - filename
+      - status
+      - date
+      - no_of_pages
+      title: InstantCaptureFileObject
+    InvoicesGetParametersPaymentStatus:
+      type: string
+      enum:
+      - paid
+      - partial
+      - unpaid
+      title: InvoicesGetParametersPaymentStatus
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields:
       type: object
       properties: {}
-      description: Accounting dimensions for this split. Same structure as header-level dimensions. Keys are dimension type codes.
-      title: InvoiceDetailObjectGlSplitsItemsDimensions
+      description: 'Item-level custom metadata fields. Replaces the stored item custom fields — omitted keys are reset to their configured default values.
+
+
+        **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.'
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields
+    InvoiceDetailObjectType:
+      type: string
+      enum:
+      - invoice
+      - credit_memo
+      - other
+      description: Type of invoice document
+      title: InvoiceDetailObjectType
+    InvoicesGetParametersStatus:
+      type: string
+      enum:
+      - approved
+      - incomplete
+      - archived
+      - processing
+      - needs-attention
+      - ready-for-export
+      - exported
+      - pending-approval
+      title: InvoicesGetParametersStatus
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields:
+      type: object
+      properties: {}
+      description: 'Item-level custom metadata fields. Keys and value types are validated against the invoice item custom field spec configured for your account in Ottimate.
+
+
+        **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
+
+
+        **Behaviour**: Omitted keys are filled with their configured default values.'
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields
+    InvoiceObjectType:
+      type: string
+      enum:
+      - invoice
+      - credit_memo
+      - other
+      description: Type of invoice document
+      title: InvoiceObjectType
+    InvoiceDetailObjectPaymentStatus:
+      type: string
+      enum:
+      - paid
+      - partial
+      - unpaid
+      description: Payment status
+      title: InvoiceDetailObjectPaymentStatus
+    InvoicesMarkUnexportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems:
+      type: object
+      properties:
+        invoice_id:
+          type: integer
+          description: Unique identifier for the invoice
+        marked_reason:
+          type: string
+          description: Invoice specific reason displayed in the invoice history; overrides the batch-level reason
+      title: InvoicesMarkUnexportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems
+    InvoiceObjectPaymentStatus:
+      type: string
+      enum:
+      - paid
+      - partial
+      - unpaid
+      description: Payment status (paid, partial, unpaid)
+      title: InvoiceObjectPaymentStatus
+    Invoices_get_invoices_root_Response_200:
+      type: object
+      properties:
+        version:
+          type: string
+          description: API version
+        count:
+          type: integer
+          description: Total number of invoices matching the query
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceObject'
+          description: Array of invoice objects
+      required:
+      - version
+      - count
+      - results
+      title: Invoices_get_invoices_root_Response_200
+    InvoiceCreationResponse:
+      type: object
+      properties:
+        version:
+          type: string
+          description: API response version
+        reference_id:
+          type: string
+          description: The reference ID for the uploaded document. Use this to track the invoice through processing.
+      required:
+      - version
+      - reference_id
+      title: InvoiceCreationResponse
+    InvoiceDetailObjectItemsProcessingResultFailure:
+      type: object
+      properties: {}
+      description: Map of request array index to error message
+      title: InvoiceDetailObjectItemsProcessingResultFailure
+    InvoiceDetailObjectItemsProcessingResultSuccess:
+      type: object
+      properties: {}
+      description: Map of request array index to created/updated item ID
+      title: InvoiceDetailObjectItemsProcessingResultSuccess
+    InvoicesImportPostResponsesContentApplicationJsonSchemaSummary:
+      type: object
+      properties:
+        invoice_count:
+          type: integer
+          description: Number of invoices accepted for processing.
+      title: InvoicesImportPostResponsesContentApplicationJsonSchemaSummary
+    InvoiceObjectOnHold:
+      type: object
+      properties:
+        is_held:
+          type: boolean
+          description: Whether invoice is on hold
+        reason:
+          type: string
+          description: Reason for hold
+      description: Hold status information
+      title: InvoiceObjectOnHold
+    BulkInvoiceUnexportOperationResponse:
+      type: object
+      properties:
+        updated:
+          type: array
+          items:
+            type: integer
+          description: Successfully processed invoice IDs
+        flagged:
+          type: array
+          items:
+            type: integer
+          description: Successfully flagged invoice IDs
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkInvoiceUnexportOperationResponseFailedItems'
+          description: Per-invoice errors
+        skipped:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkInvoiceUnexportOperationResponseSkippedItems'
+          description: Per-invoice errors
+      required:
+      - updated
+      - failed
+      title: BulkInvoiceUnexportOperationResponse
+    InvoiceDetailObjectHistoryItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: History log entry ID
+        date:
+          type: string
+          format: date-time
+          description: Timestamp of the history event
+        date_utc:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: UTC equivalent of date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
+        reason:
+          type: string
+          description: Type of action that occurred
+        message:
+          type: string
+          description: Details about the action
+        user:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceDetailObjectHistoryItemsUser'
+          - type: 'null'
+          description: User who performed the action
+      title: InvoiceDetailObjectHistoryItems
+    InvoiceDetailObjectItemsProcessingResult:
+      type: object
+      properties:
+        success:
+          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultSuccess'
+          description: Map of request array index to created/updated item ID
+        failure:
+          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultFailure'
+          description: Map of request array index to error message
+        status:
+          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultStatus'
+          description: 'Overall processing status: success (all items processed), partial_success (some failed), failure (all failed)'
+      description: Result of items processing (only present in PATCH response when items were included in request)
+      title: InvoiceDetailObjectItemsProcessingResult
     InvoiceDetailObjectHistoryItemsUser:
       type: object
       properties:
@@ -1305,75 +1887,109 @@ components:
           description: Last name
       description: User who performed the action
       title: InvoiceDetailObjectHistoryItemsUser
-    InvoiceObjectLastModifiedUser:
+    InvoiceDetailObjectItemsProcessingResultStatus:
+      type: string
+      enum:
+      - success
+      - partial_success
+      - failure
+      description: 'Overall processing status: success (all items processed), partial_success (some failed), failure (all failed)'
+      title: InvoiceDetailObjectItemsProcessingResultStatus
+    BulkInvoiceOperationResponseFailedItems:
       type: object
       properties:
         id:
           type: integer
-        email:
-          type: string
-          format: email
-        first_name:
-          type: string
-        last_name:
-          type: string
-      description: User who last modified the invoice
-      title: InvoiceObjectLastModifiedUser
-    InvoicesGetParametersStatus:
-      type: string
-      enum:
-      - approved
-      - incomplete
-      - archived
-      - processing
-      - needs-attention
-      - ready-for-export
-      - exported
-      - pending-approval
-      title: InvoicesGetParametersStatus
-    InvoiceObjectPaymentStatus:
-      type: string
-      enum:
-      - paid
-      - partial
-      - unpaid
-      description: Payment status (paid, partial, unpaid)
-      title: InvoiceObjectPaymentStatus
-    InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems:
-      type: object
-      properties:
-        source:
-          type: string
-          description: Filename of the file that failed.
+          description: Invoice ID that failed
         error:
           type: string
-          description: Human-readable error message.
-      title: InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems
-    InvoiceDetailObjectPaymentStatus:
-      type: string
-      enum:
-      - paid
-      - partial
-      - unpaid
-      description: Payment status
-      title: InvoiceDetailObjectPaymentStatus
-    BulkInvoiceOperationResponse:
+          description: Failure reason
+      required:
+      - id
+      - error
+      title: BulkInvoiceOperationResponseFailedItems
+    InvoiceObjectDimensions:
+      type: object
+      properties: {}
+      description: Header-level dimension mappings. Contains accounting dimensions assigned to the invoice header (e.g., Department, Class, Location).
+      title: InvoiceObjectDimensions
+    BulkInvoiceUnexportOperationResponseFailedItems:
       type: object
       properties:
-        updated:
-          type: array
-          items:
-            type: integer
-          description: Successfully processed invoice IDs
-        failed:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkInvoiceOperationResponseFailedItems'
-          description: Per-invoice errors
+        id:
+          type: integer
+          description: Invoice ID that failed
+        error:
+          type: string
+          description: Failure reason
       required:
-      - updated
-      - failed
-      title: BulkInvoiceOperationResponse
+      - id
+      - error
+      title: BulkInvoiceUnexportOperationResponseFailedItems
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaCustomFields:
+      type: object
+      properties: {}
+      description: 'Header-level custom metadata fields. Replaces the stored custom fields with the provided object — any keys not included are reset to their configured default values.
+
+
+        **Requirements**: Custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
+
+
+        **Behaviour**: Omit the field entirely to preserve existing custom fields.'
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaCustomFields
+    InvoiceDetailObjectImagesItems:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique image identifier
+        url:
+          type: string
+          description: CDN URL to the invoice image
+      title: InvoiceDetailObjectImagesItems
+    Invoices_post_invoices_import_Response_202:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Always "processing" — indicates the job was queued.
+        batch_id:
+          type: string
+          description: Unique ID for this batch job. Use with GET /v1/batch/{batch_id}/progress to poll status and GET /v1/batch/{batch_id}/results to fetch per-invoice outcomes.
+        batch_url:
+          type: string
+          description: Relative URL to poll for batch progress.
+        results_url:
+          type: string
+          description: Relative URL to fetch per-invoice results once the batch completes.
+        summary:
+          $ref: '#/components/schemas/InvoicesImportPostResponsesContentApplicationJsonSchemaSummary'
+      title: Invoices_post_invoices_import_Response_202
+    Invoices_get_invoices_uploads_Response_200:
+      type: object
+      properties:
+        version:
+          type: string
+          description: API version
+        count:
+          type: integer
+          description: Total number of files matching the query
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InstantCaptureFileObject'
+      title: Invoices_get_invoices_uploads_Response_200
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields:
+      type: object
+      properties: {}
+      description: 'Header-level custom metadata fields for this invoice. Keys and value types are validated against the custom field spec configured for your account in Ottimate.
+
+
+        **Requirements**: Custom fields must be configured for your account before use. Sending `custom_fields` when no spec is configured returns a `400` error. Unrecognised keys return a `400` error.
+
+
+        **Behaviour**: Omitted keys are filled with their configured default values.'
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields
     InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItems:
       type: object
       properties:
@@ -1444,92 +2060,137 @@ components:
       - approver
       - created_date
       title: ApproverObject
-    Invoices_patch_invoices_id_images_Response_200:
-      type: object
-      properties:
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems'
-        image_errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems'
-          description: Always empty on 200.
-      title: Invoices_patch_invoices_id_images_Response_200
-    Invoices_get_invoices_root_Response_200:
+    Invoices_post_invoices_id_flag_Response_200:
       type: object
       properties:
         version:
           type: string
           description: API version
-        count:
-          type: integer
-          description: Total number of invoices matching the query
-        results:
+        success:
+          type: boolean
+          description: Whether the operation was successful
+        message:
+          type: string
+          description: Success message
+        invoice:
+          $ref: '#/components/schemas/InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice'
+      title: Invoices_post_invoices_id_flag_Response_200
+    InvoiceDetailObjectGlSplitsItems:
+      type: object
+      properties:
+        memo:
+          type:
+          - string
+          - 'null'
+          description: Optional note on the split
+        amount:
+          type: string
+          description: Split amount formatted to 2 decimal places
+        custom_fields:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceDetailObjectGlSplitsItemsCustomFields'
+          - type: 'null'
+          description: Custom metadata fields for this split
+        dimensions:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceDetailObjectGlSplitsItemsDimensions'
+          - type: 'null'
+          description: Accounting dimensions for this split. Same structure as header-level dimensions. Keys are dimension type codes.
+      title: InvoiceDetailObjectGlSplitsItems
+    Invoices_get_invoices_id_approvers_Response_200:
+      type: object
+      properties:
+        version:
+          type: string
+          description: API version
+        approvers:
           type: array
           items:
-            $ref: '#/components/schemas/InvoiceObject'
-          description: Array of invoice objects
+            $ref: '#/components/schemas/ApproverObject'
+      title: Invoices_get_invoices_id_approvers_Response_200
+    BulkInvoiceOperationResponse:
+      type: object
+      properties:
+        updated:
+          type: array
+          items:
+            type: integer
+          description: Successfully processed invoice IDs
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkInvoiceOperationResponseFailedItems'
+          description: Per-invoice errors
       required:
-      - version
-      - count
-      - results
-      title: Invoices_get_invoices_root_Response_200
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields:
+      - updated
+      - failed
+      title: BulkInvoiceOperationResponse
+    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions:
       type: object
       properties: {}
-      description: 'Header-level custom metadata fields for this invoice. Keys and value types are validated against the custom field spec configured for your account in Ottimate.
-
-
-        **Requirements**: Custom fields must be configured for your account before use. Sending `custom_fields` when no spec is configured returns a `400` error. Unrecognised keys return a `400` error.
-
-
-        **Behaviour**: Omitted keys are filled with their configured default values.'
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields
-    InvoiceDetailObjectItemsProcessingResultFailure:
+      description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT', 'CLASS') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. If omitted, no dimensions are set. Invalid dimension types or IDs return a `400` error.
+      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions
+    InvoicesMarkExportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems:
+      type: object
+      properties:
+        invoice_id:
+          type: integer
+          description: Unique identifier for the invoice
+        marked_reason:
+          type: string
+          description: Invoice specific reason displayed in the invoice history; overrides the batch-level reason
+        export_transaction_id:
+          type: string
+          description: Invoice-specific transaction ID; overrides the batch-level transaction ID
+      title: InvoicesMarkExportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaDimensions:
       type: object
       properties: {}
-      description: Map of request array index to error message
-      title: InvoiceDetailObjectItemsProcessingResultFailure
-    BulkInvoiceUnexportOperationResponseFailedItems:
+      description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. Replaces all header dimensions with the provided set. Omit the field entirely to preserve existing dimensions. Pass `{}` to clear all header dimensions.
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaDimensions
+    InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems:
+      type: object
+      properties:
+        source:
+          type: string
+          description: Filename of the file that failed.
+        error:
+          type: string
+          description: Human-readable error message.
+      title: InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImageErrorsItems
+    BulkInvoiceUnexportOperationResponseSkippedItems:
       type: object
       properties:
         id:
           type: integer
-          description: Invoice ID that failed
+          description: Invoice ID that skipped
         error:
           type: string
-          description: Failure reason
+          description: Skipped reason
       required:
       - id
       - error
-      title: BulkInvoiceUnexportOperationResponseFailedItems
-    InvoiceObjectOnHold:
+      title: BulkInvoiceUnexportOperationResponseSkippedItems
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaRawImagesItems:
       type: object
       properties:
-        is_held:
-          type: boolean
-          description: Whether invoice is on hold
-        reason:
+        filename:
           type: string
-          description: Reason for hold
-      description: Hold status information
-      title: InvoiceObjectOnHold
-    InvoiceDetailObjectLastModifiedUser:
-      type: object
-      properties:
-        id:
-          type: integer
-        email:
+          description: Original filename including extension (e.g. invoice.pdf). Used to determine file format.
+        data:
           type: string
-          format: email
-        first_name:
-          type: string
-        last_name:
-          type: string
-      description: User who last modified the invoice
-      title: InvoiceDetailObjectLastModifiedUser
+          description: Base64-encoded image content.
+      required:
+      - filename
+      - data
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaRawImagesItems
+    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaType:
+      type: string
+      enum:
+      - invoice
+      - credit_memo
+      description: Type of document.
+      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaType
     InvoiceObject:
       type: object
       properties:
@@ -1658,266 +2319,6 @@ components:
       - payment_status
       - created_at
       title: InvoiceObject
-    InvoiceDetailObjectItemsProcessingResult:
-      type: object
-      properties:
-        success:
-          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultSuccess'
-          description: Map of request array index to created/updated item ID
-        failure:
-          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultFailure'
-          description: Map of request array index to error message
-        status:
-          $ref: '#/components/schemas/InvoiceDetailObjectItemsProcessingResultStatus'
-          description: 'Overall processing status: success (all items processed), partial_success (some failed), failure (all failed)'
-      description: Result of items processing (only present in PATCH response when items were included in request)
-      title: InvoiceDetailObjectItemsProcessingResult
-    BulkInvoiceUnexportOperationResponse:
-      type: object
-      properties:
-        updated:
-          type: array
-          items:
-            type: integer
-          description: Successfully processed invoice IDs
-        flagged:
-          type: array
-          items:
-            type: integer
-          description: Successfully flagged invoice IDs
-        failed:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkInvoiceUnexportOperationResponseFailedItems'
-          description: Per-invoice errors
-        skipped:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkInvoiceUnexportOperationResponseSkippedItems'
-          description: Per-invoice errors
-      required:
-      - updated
-      - failed
-      title: BulkInvoiceUnexportOperationResponse
-    InvoicesMarkUnexportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems:
-      type: object
-      properties:
-        invoice_id:
-          type: integer
-          description: Unique identifier for the invoice
-        marked_reason:
-          type: string
-          description: Invoice specific reason displayed in the invoice history; overrides the batch-level reason
-      title: InvoicesMarkUnexportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItems:
-      type: object
-      properties:
-        upload_id:
-          type: string
-          description: A mandatory unique identifier for creating an invoice.
-        ottimate_location_id:
-          type: integer
-          description: The ID of the location for this invoice.
-        erp_vendor_id:
-          type: string
-          description: The ERP ID of the vendor for this invoice.
-        invoice_number:
-          type: string
-        invoice_date:
-          type: string
-          format: date
-        due_date:
-          type: string
-          format: date
-        posting_date:
-          type: string
-          format: date
-        total_amount:
-          type: number
-          format: double
-        total_tax:
-          type: number
-          format: double
-        purchase_order:
-          type: string
-        notes:
-          type: string
-        currency:
-          type: string
-        type:
-          $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType'
-          description: Type of document.
-        dimensions:
-          oneOf:
-          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions'
-          - type: 'null'
-          description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT', 'CLASS') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. If omitted, no dimensions are set. Invalid dimension types or IDs return a `400` error.
-        custom_fields:
-          oneOf:
-          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsCustomFields'
-          - type: 'null'
-          description: 'Header-level custom metadata fields for this invoice. Keys and value types are validated against the custom field spec configured for your account in Ottimate.
-
-
-            **Requirements**: Custom fields must be configured for your account before use. Sending `custom_fields` when no spec is configured returns a `400` error. Unrecognised keys return a `400` error.
-
-
-            **Behaviour**: Omitted keys are filled with their configured default values.'
-        image_urls:
-          type: array
-          items:
-            type: string
-            format: uri
-          description: 'List of HTTPS image URLs to attach to the invoice. Supported formats: PDF, JPG, JPEG, PNG. raw_images is not supported for bulk import.'
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems'
-          description: Line items to create for the invoice.
-      required:
-      - upload_id
-      - ottimate_location_id
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItems
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions:
-      type: object
-      properties: {}
-      description: 'Item-level dimension mappings. Same format as header-level dimensions: keys are dimension types and values are `erp_dimension_id` strings. If omitted, no item-level dimensions are set.'
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaRawImagesItems:
-      type: object
-      properties:
-        filename:
-          type: string
-          description: Original filename including extension (e.g. invoice.pdf). Used to determine file format.
-        data:
-          type: string
-          description: Base64-encoded image content.
-      required:
-      - filename
-      - data
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaRawImagesItems
-    Invoices_get_invoices_receiver-export_Response_200:
-      type: object
-      properties:
-        count:
-          type: integer
-          description: Total number of invoices matching the query
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: URL for the next page of results, or null if on the last page
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: URL for the previous page of results, or null if on the first page
-        page:
-          type: integer
-          description: Current page number
-        per_page:
-          type: integer
-          description: Number of results per page
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItems'
-      title: Invoices_get_invoices_receiver-export_Response_200
-    InvoiceDetailObjectItemsProcessingResultSuccess:
-      type: object
-      properties: {}
-      description: Map of request array index to created/updated item ID
-      title: InvoiceDetailObjectItemsProcessingResultSuccess
-    InvoiceDetailObjectHistoryItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: History log entry ID
-        date:
-          type: string
-          format: date-time
-          description: Timestamp of the history event
-        date_utc:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: UTC equivalent of date. ISO 8601 with Z suffix, e.g. "2025-05-20T15:17:35.652584Z".
-        reason:
-          type: string
-          description: Type of action that occurred
-        message:
-          type: string
-          description: Details about the action
-        user:
-          oneOf:
-          - $ref: '#/components/schemas/InvoiceDetailObjectHistoryItemsUser'
-          - type: 'null'
-          description: User who performed the action
-      title: InvoiceDetailObjectHistoryItems
-    InvoicesGetParametersPaymentStatus:
-      type: string
-      enum:
-      - paid
-      - partial
-      - unpaid
-      title: InvoicesGetParametersPaymentStatus
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaCustomFields:
-      type: object
-      properties: {}
-      description: 'Header-level custom metadata fields. Replaces the stored custom fields with the provided object — any keys not included are reset to their configured default values.
-
-
-        **Requirements**: Custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
-
-
-        **Behaviour**: Omit the field entirely to preserve existing custom fields.'
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaCustomFields
-    InvoiceDetailObjectPaymentInfo:
-      type: object
-      properties:
-        payment_method:
-          type: string
-          description: Method used for payment
-        reference:
-          type: string
-          description: Payment reference number
-      description: Payment information (only present if payment_status is 'paid')
-      title: InvoiceDetailObjectPaymentInfo
-    InvoicesMarkExportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems:
-      type: object
-      properties:
-        invoice_id:
-          type: integer
-          description: Unique identifier for the invoice
-        marked_reason:
-          type: string
-          description: Invoice specific reason displayed in the invoice history; overrides the batch-level reason
-        export_transaction_id:
-          type: string
-          description: Invoice-specific transaction ID; overrides the batch-level transaction ID
-      title: InvoicesMarkExportedPostRequestBodyContentApplicationJsonSchemaInvoicesItems
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Human-readable error message
-        request_id:
-          type: string
-          description: Unique identifier for the request
-        message:
-          description: Additional error details, can be an object, a string, or null.
-        timestamp:
-          type: string
-          description: Timestamp when error occurred
-      required:
-      - code
-      - message
-      title: ErrorResponse
     InvoiceDetailObject:
       type: object
       properties:
@@ -2046,407 +2447,6 @@ components:
       - payment_status
       - created_at
       title: InvoiceDetailObject
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems:
-      type: object
-      properties:
-        name:
-          type: string
-        sku:
-          type: string
-        quantity:
-          type: number
-          format: double
-        price:
-          type: number
-          format: double
-        is_taxed:
-          type: boolean
-        dimensions:
-          oneOf:
-          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsDimensions'
-          - type: 'null'
-          description: 'Item-level dimension mappings. Same format as header-level dimensions: keys are dimension types and values are `erp_dimension_id` strings. If omitted, no item-level dimensions are set.'
-        custom_fields:
-          oneOf:
-          - $ref: '#/components/schemas/InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields'
-          - type: 'null'
-          description: 'Item-level custom metadata fields. Keys and value types are validated against the invoice item custom field spec configured for your account in Ottimate.
-
-
-            **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
-
-
-            **Behaviour**: Omitted keys are filled with their configured default values.'
-      required:
-      - name
-      - quantity
-      - price
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItems
-    InvoiceDetailObjectItemsProcessingResultStatus:
-      type: string
-      enum:
-      - success
-      - partial_success
-      - failure
-      description: 'Overall processing status: success (all items processed), partial_success (some failed), failure (all failed)'
-      title: InvoiceDetailObjectItemsProcessingResultStatus
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Existing item ID to update. Omit to create a new item.
-        item:
-          type: integer
-          description: Inventory item ID
-        name:
-          type: string
-        sku:
-          type: string
-        quantity:
-          type: number
-          format: double
-        price:
-          type: number
-          format: double
-        is_taxed:
-          type: boolean
-        dimensions:
-          $ref: '#/components/schemas/InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions'
-          description: Item-level dimension mappings. Keys are dimension types, values are `erp_dimension_id` strings. Merges with existing dimensions. Set a value to `null` to remove only that dimension. Pass `{}` or omit the field to preserve existing dimensions.
-        custom_fields:
-          oneOf:
-          - $ref: '#/components/schemas/InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields'
-          - type: 'null'
-          description: 'Item-level custom metadata fields. Replaces the stored item custom fields — omitted keys are reset to their configured default values.
-
-
-            **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.'
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItems
-    InvoiceDetailObjectGlSplitsItemsCustomFields:
-      type: object
-      properties: {}
-      description: Custom metadata fields for this split
-      title: InvoiceDetailObjectGlSplitsItemsCustomFields
-    Invoices_post_invoices_import_Response_202:
-      type: object
-      properties:
-        status:
-          type: string
-          description: Always "processing" — indicates the job was queued.
-        batch_id:
-          type: string
-          description: Unique ID for this batch job. Use with GET /v1/batch/{batch_id}/progress to poll status and GET /v1/batch/{batch_id}/results to fetch per-invoice outcomes.
-        batch_url:
-          type: string
-          description: Relative URL to poll for batch progress.
-        results_url:
-          type: string
-          description: Relative URL to fetch per-invoice results once the batch completes.
-        summary:
-          $ref: '#/components/schemas/InvoicesImportPostResponsesContentApplicationJsonSchemaSummary'
-      title: Invoices_post_invoices_import_Response_202
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields:
-      type: object
-      properties: {}
-      description: 'Item-level custom metadata fields. Replaces the stored item custom fields — omitted keys are reset to their configured default values.
-
-
-        **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.'
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsCustomFields
-    InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems:
-      type: object
-      properties:
-        id:
-          type: integer
-        url:
-          type: string
-      title: InvoicesIdImagesPatchResponsesContentApplicationJsonSchemaImagesItems
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaDimensions:
-      type: object
-      properties: {}
-      description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. Replaces all header dimensions with the provided set. Omit the field entirely to preserve existing dimensions. Pass `{}` to clear all header dimensions.
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaDimensions
-    InvoiceObjectDimensions:
-      type: object
-      properties: {}
-      description: Header-level dimension mappings. Contains accounting dimensions assigned to the invoice header (e.g., Department, Class, Location).
-      title: InvoiceObjectDimensions
-    BulkInvoiceUnexportOperationResponseSkippedItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Invoice ID that skipped
-        error:
-          type: string
-          description: Skipped reason
-      required:
-      - id
-      - error
-      title: BulkInvoiceUnexportOperationResponseSkippedItems
-    InstantCaptureFileObject:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique file identifier
-        filename:
-          type: string
-          description: Name of the file
-        status:
-          type: string
-          description: Processing status of the file
-        date:
-          type: string
-          format: date-time
-          description: Date when the file was uploaded
-        no_of_pages:
-          type: integer
-          description: Number of pages in the file
-        ottimate_location_name:
-          type: string
-          description: Name of the location
-        preview_url:
-          type: string
-          description: URL to preview the file
-      required:
-      - id
-      - filename
-      - status
-      - date
-      - no_of_pages
-      title: InstantCaptureFileObject
-    BulkInvoiceOperationResponseFailedItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Invoice ID that failed
-        error:
-          type: string
-          description: Failure reason
-      required:
-      - id
-      - error
-      title: BulkInvoiceOperationResponseFailedItems
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType:
-      type: string
-      enum:
-      - invoice
-      - credit_memo
-      description: Type of document.
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsType
-    InvoiceCreationResponse:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API response version
-        reference_id:
-          type: string
-          description: The reference ID for the uploaded document. Use this to track the invoice through processing.
-      required:
-      - version
-      - reference_id
-      title: InvoiceCreationResponse
-    ApproverObjectPolicy:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Policy ID
-        name:
-          type: string
-          description: Policy name
-      description: Policy that assigned this approver (null if manually added)
-      title: ApproverObjectPolicy
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields:
-      type: object
-      properties: {}
-      description: 'Item-level custom metadata fields. Keys and value types are validated against the invoice item custom field spec configured for your account in Ottimate.
-
-
-        **Requirements**: Invoice item custom fields must be configured for your account before use. Returns a `400` error if no spec is found or if unrecognised keys are sent.
-
-
-        **Behaviour**: Omitted keys are filled with their configured default values.'
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsItemsItemsCustomFields
-    InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItemsReceiverLinesItems:
-      type: object
-      properties:
-        catalog_unique_key:
-          type:
-          - string
-          - 'null'
-          description: Unique key identifying the matched catalog entry, suitable for cross-referencing with your catalog system
-        upc:
-          type: string
-          description: Universal Product Code from the catalog entry, zero-padded to 13 digits (EAN-13 / GTIN-13). Empty string if no UPC is on file
-        description:
-          type: string
-          description: Item name sourced from the matched catalog entry
-        uom:
-          type: string
-          description: Catalog-normalized unit of measure (e.g. CS, EA, LB). Always reflects the catalog UOM, not the raw invoice UOM
-        case_pack:
-          type: number
-          format: double
-          description: Number of units per case as defined in the catalog entry
-        quantity_received:
-          type: number
-          format: double
-          description: UOM-normalized received quantity. For unit-matched lines billed per unit (UNIT_PRICE), the raw quantity is divided by case_pack to convert to cases. For all other matches the raw invoice quantity is returned as-is
-        unit_price:
-          type: number
-          format: double
-          description: Absolute unit price from the invoice line item
-        extended_price:
-          type: number
-          format: double
-          description: Absolute extended (total) price for this line item
-        pack_size:
-          type:
-          - string
-          - 'null'
-          description: Human-readable pack size description from the catalog entry (e.g. '25 LB', '6 CT')
-        vendor_id:
-          type:
-          - string
-          - 'null'
-          description: Vendor identifier for the inventory system (e.g. LOCSMS). Sourced from the vendor configuration on the location, not the invoice vendor object
-        ottimate_catalog_id:
-          type: string
-          description: Ottimate-internal catalog entry identifier for audit and lookup. Not recognized by LOCSMS or servicers
-      title: InvoicesReceiverExportGetResponsesContentApplicationJsonSchemaResultsItemsReceiverLinesItems
-    InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions:
-      type: object
-      properties: {}
-      description: Header-level dimension mappings. Keys are dimension types (e.g., 'DEPARTMENT', 'CLASS') and values are `erp_dimension_id` strings from the `GET /dimensions` endpoint. If omitted, no dimensions are set. Invalid dimension types or IDs return a `400` error.
-      title: InvoicesImportPostRequestBodyContentApplicationJsonSchemaItemsDimensions
-    InvoiceObjectType:
-      type: string
-      enum:
-      - invoice
-      - credit_memo
-      - other
-      description: Type of invoice document
-      title: InvoiceObjectType
-    Invoices_post_invoices_id_flag_Response_200:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API version
-        success:
-          type: boolean
-          description: Whether the operation was successful
-        message:
-          type: string
-          description: Success message
-        invoice:
-          $ref: '#/components/schemas/InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice'
-      title: Invoices_post_invoices_id_flag_Response_200
-    Invoices_get_invoices_uploads_Response_200:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API version
-        count:
-          type: integer
-          description: Total number of files matching the query
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/InstantCaptureFileObject'
-      title: Invoices_get_invoices_uploads_Response_200
-    InvoiceDetailObjectImagesItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique image identifier
-        url:
-          type: string
-          description: CDN URL to the invoice image
-      title: InvoiceDetailObjectImagesItems
-    Invoices_get_invoices_id_approvers_Response_200:
-      type: object
-      properties:
-        version:
-          type: string
-          description: API version
-        approvers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApproverObject'
-      title: Invoices_get_invoices_id_approvers_Response_200
-    InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Invoice ID
-        invoice_number:
-          type: string
-          description: Invoice number
-        status:
-          type: string
-          description: Invoice status after flagging
-      title: InvoicesIdFlagPostResponsesContentApplicationJsonSchemaInvoice
-    InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions:
-      type: object
-      properties: {}
-      description: Item-level dimension mappings. Keys are dimension types, values are `erp_dimension_id` strings. Merges with existing dimensions. Set a value to `null` to remove only that dimension. Pass `{}` or omit the field to preserve existing dimensions.
-      title: InvoicesIdPatchRequestBodyContentApplicationJsonSchemaItemsItemsDimensions
-    InvoiceDetailObjectGlSplitsItems:
-      type: object
-      properties:
-        memo:
-          type:
-          - string
-          - 'null'
-          description: Optional note on the split
-        amount:
-          type: string
-          description: Split amount formatted to 2 decimal places
-        custom_fields:
-          oneOf:
-          - $ref: '#/components/schemas/InvoiceDetailObjectGlSplitsItemsCustomFields'
-          - type: 'null'
-          description: Custom metadata fields for this split
-        dimensions:
-          oneOf:
-          - $ref: '#/components/schemas/InvoiceDetailObjectGlSplitsItemsDimensions'
-          - type: 'null'
-          description: Accounting dimensions for this split. Same structure as header-level dimensions. Keys are dimension type codes.
-      title: InvoiceDetailObjectGlSplitsItems
-    InvoiceObjectImagesItems:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Unique image identifier
-        url:
-          type: string
-          description: CDN URL to the invoice image
-      title: InvoiceObjectImagesItems
-    InvoicesImportPostResponsesContentApplicationJsonSchemaSummary:
-      type: object
-      properties:
-        invoice_count:
-          type: integer
-          description: Number of invoices accepted for processing.
-      title: InvoicesImportPostResponsesContentApplicationJsonSchemaSummary
-    InvoiceDetailObjectType:
-      type: string
-      enum:
-      - invoice
-      - credit_memo
-      - other
-      description: Type of invoice document
-      title: InvoiceDetailObjectType
   securitySchemes:
     OAuth2:
       type: http

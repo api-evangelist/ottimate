@@ -74,12 +74,6 @@ paths:
               - client_secret
 components:
   schemas:
-    OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType:
-      type: string
-      enum:
-      - client_credentials
-      description: Grant type for the request. Must be 'client_credentials'.
-      title: OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType
     Oauth_post_oauth_token_Response_200:
       type: object
       properties:
@@ -96,6 +90,12 @@ components:
           type: string
           description: The scope of the access token.
       title: Oauth_post_oauth_token_Response_200
+    OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType:
+      type: string
+      enum:
+      - client_credentials
+      description: Grant type for the request. Must be 'client_credentials'.
+      title: OauthTokenPostRequestBodyContentApplicationXWwwFormUrlencodedSchemaGrantType
     ErrorResponse:
       type: object
       properties:

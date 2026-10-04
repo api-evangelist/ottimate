@@ -177,21 +177,20 @@ paths:
                 $ref: '#/components/schemas/Accounts_get_accounts_root_Response_200'
 components:
   schemas:
-    CompanyObject:
+    Accounts_get_accounts_id_locations_Response_200:
       type: object
       properties:
-        id:
+        count:
           type: integer
-        name:
-          type: string
-        location_count:
+        page:
           type: integer
-        plan:
-          type: string
-      required:
-      - id
-      - name
-      title: CompanyObject
+        limit:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationObject'
+      title: Accounts_get_accounts_id_locations_Response_200
     Accounts_get_accounts_id_companies_Response_200:
       type: object
       properties:
@@ -225,20 +224,6 @@ components:
       - id
       - name
       title: LocationObject
-    Accounts_get_accounts_root_Response_200:
-      type: object
-      properties:
-        count:
-          type: integer
-        page:
-          type: integer
-        limit:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountObject'
-      title: Accounts_get_accounts_root_Response_200
     AccountObject:
       type: object
       properties:
@@ -267,7 +252,22 @@ components:
       - id
       - name
       title: AccountObject
-    Accounts_get_accounts_id_locations_Response_200:
+    CompanyObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location_count:
+          type: integer
+        plan:
+          type: string
+      required:
+      - id
+      - name
+      title: CompanyObject
+    Accounts_get_accounts_root_Response_200:
       type: object
       properties:
         count:
@@ -279,8 +279,8 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/LocationObject'
-      title: Accounts_get_accounts_id_locations_Response_200
+            $ref: '#/components/schemas/AccountObject'
+      title: Accounts_get_accounts_root_Response_200
   securitySchemes:
     OAuth2:
       type: http

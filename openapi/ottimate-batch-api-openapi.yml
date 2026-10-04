@@ -205,26 +205,112 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    BatchProgressResponseStatus:
+      type: string
+      enum:
+      - processing
+      - completed
+      description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
+      title: BatchProgressResponseStatus
+    BatchResultsResponse:
+      type: object
+      properties:
+        version:
+          type: string
+        batch_id:
+          type: string
+          description: The batch identifier
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchResultsResponseResultsItems'
+          description: One entry per task in the batch
+      required:
+      - version
+      - batch_id
+      - results
+      title: BatchResultsResponse
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Human-readable error message
+        request_id:
+          type: string
+          description: Unique identifier for the request
+        message:
+          description: Additional error details, can be an object, a string, or null.
+        timestamp:
+          type: string
+          description: Timestamp when error occurred
+      required:
+      - code
+      - message
+      title: ErrorResponse
+    Batch_get_batch_root_Response_200:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total number of batches matching the filter
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchGetResponsesContentApplicationJsonSchemaResultsItems'
+      title: Batch_get_batch_root_Response_200
+    BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus:
+      type: string
+      enum:
+      - processing
+      - completed
+      description: '`processing` while tasks are running; `completed` when all tasks have finished'
+      title: BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus
     BatchGetParametersStatus:
       type: string
       enum:
       - processing
       - completed
       title: BatchGetParametersStatus
-    BatchResultsResponseResultsItems:
+    BatchGetResponsesContentApplicationJsonSchemaResultsItems:
       type: object
       properties:
-        task:
-          type: integer
-          description: Internal task ID
-        result:
-          description: The outcome of the task (e.g. the created/updated resource). Null if the task failed.
-        message:
+        batch_id:
           type: string
-          description: Error message if the task failed. Null on success.
+          description: The batch identifier. Use this to poll `/batch/{id}/progress` or fetch `/batch/{id}/results`.
+        status:
+          $ref: '#/components/schemas/BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus'
+          description: '`processing` while tasks are running; `completed` when all tasks have finished'
+        progress:
+          type: number
+          format: double
+          description: Fraction of tasks completed (0.0 to 1.0)
+        tasks_count:
+          type: integer
+          description: Total number of tasks in the batch
+        tasks_completed:
+          type: integer
+          description: Number of tasks that completed successfully
+        tasks_failed:
+          type: integer
+          description: Number of tasks that failed
+        modified_at:
+          type: string
+          description: Last time the batch was modified
+        completed_at:
+          type:
+          - string
+          - 'null'
+          description: When the batch finished, or null if still processing
       required:
-      - task
-      title: BatchResultsResponseResultsItems
+      - batch_id
+      - status
+      - progress
+      - tasks_count
+      - tasks_completed
+      - tasks_failed
+      - modified_at
+      title: BatchGetResponsesContentApplicationJsonSchemaResultsItems
     BatchProgressResponse:
       type: object
       properties:
@@ -268,106 +354,20 @@ components:
       - tasks_failed
       - status
       title: BatchProgressResponse
-    ErrorResponse:
+    BatchResultsResponseResultsItems:
       type: object
       properties:
-        code:
-          type: string
-          description: Human-readable error message
-        request_id:
-          type: string
-          description: Unique identifier for the request
+        task:
+          type: integer
+          description: Internal task ID
+        result:
+          description: The outcome of the task (e.g. the created/updated resource). Null if the task failed.
         message:
-          description: Additional error details, can be an object, a string, or null.
-        timestamp:
           type: string
-          description: Timestamp when error occurred
+          description: Error message if the task failed. Null on success.
       required:
-      - code
-      - message
-      title: ErrorResponse
-    BatchProgressResponseStatus:
-      type: string
-      enum:
-      - processing
-      - completed
-      description: '`processing` while tasks are running; `completed` when all tasks have finished (regardless of individual success/failure)'
-      title: BatchProgressResponseStatus
-    BatchResultsResponse:
-      type: object
-      properties:
-        version:
-          type: string
-        batch_id:
-          type: string
-          description: The batch identifier
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchResultsResponseResultsItems'
-          description: One entry per task in the batch
-      required:
-      - version
-      - batch_id
-      - results
-      title: BatchResultsResponse
-    Batch_get_batch_root_Response_200:
-      type: object
-      properties:
-        count:
-          type: integer
-          description: Total number of batches matching the filter
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchGetResponsesContentApplicationJsonSchemaResultsItems'
-      title: Batch_get_batch_root_Response_200
-    BatchGetResponsesContentApplicationJsonSchemaResultsItems:
-      type: object
-      properties:
-        batch_id:
-          type: string
-          description: The batch identifier. Use this to poll `/batch/{id}/progress` or fetch `/batch/{id}/results`.
-        status:
-          $ref: '#/components/schemas/BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus'
-          description: '`processing` while tasks are running; `completed` when all tasks have finished'
-        progress:
-          type: number
-          format: double
-          description: Fraction of tasks completed (0.0 to 1.0)
-        tasks_count:
-          type: integer
-          description: Total number of tasks in the batch
-        tasks_completed:
-          type: integer
-          description: Number of tasks that completed successfully
-        tasks_failed:
-          type: integer
-          description: Number of tasks that failed
-        modified_at:
-          type: string
-          description: Last time the batch was modified
-        completed_at:
-          type:
-          - string
-          - 'null'
-          description: When the batch finished, or null if still processing
-      required:
-      - batch_id
-      - status
-      - progress
-      - tasks_count
-      - tasks_completed
-      - tasks_failed
-      - modified_at
-      title: BatchGetResponsesContentApplicationJsonSchemaResultsItems
-    BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus:
-      type: string
-      enum:
-      - processing
-      - completed
-      description: '`processing` while tasks are running; `completed` when all tasks have finished'
-      title: BatchGetResponsesContentApplicationJsonSchemaResultsItemsStatus
+      - task
+      title: BatchResultsResponseResultsItems
   securitySchemes:
     OAuth2:
       type: http
