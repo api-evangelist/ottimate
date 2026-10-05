@@ -1,0 +1,36 @@
+slug: ottimate
+provider: Ottimate
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Invoices
+  spec_file: ottimate-invoices-api-openapi.yml
+  capability_id: BC-200.20
+  capability_id_l1: BC-200
+  capability_name: Accounts Payable Management
+  confidence: 0.92
+  evidence: POST /invoices/upload Create invoice from file upload or URL download; GET /invoices/{id}/approvers
+    Retrieve list of approvers for a specific invoice; InvoiceObjectPaymentStatus
+  reason: Vendor-invoice capture, line/dimension coding, approver routing, flagging for review and payment
+    status — this is plainly accounts payable invoice processing, consistent with the vendor's AP automation
+    description.
+- tag: Purchase Orders
+  spec_file: ottimate-purchase-orders-api-openapi.yml
+  capability_id: BC-500.30
+  capability_id_l1: BC-500
+  capability_name: Purchase Order Management
+  confidence: 0.9
+  evidence: POST /purchase-orders  post-purchase-orders-root  Create a single purchase order; PATCH /purchase-orders/{id}  Update
+    an existing purchase order
+  reason: Operations create, retrieve and update purchase orders with line items, status and custom fields
+    — squarely PO lifecycle within procurement, consistent with the vendor's AP/PO-matching product.
